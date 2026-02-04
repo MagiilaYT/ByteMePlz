@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteMePlz | The Ultimate Unblocked Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Intro Animation */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+            pointer-events: none;
+        }
+
+        .intro-text {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ff88, #00d4ff, #ff00ff, #00ff88);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 2s ease infinite, glitch 0.3s ease-in-out;
+            text-align: center;
+            letter-spacing: 4px;
+            position: relative;
+        }
+
+        .intro-text::before,
+        .intro-text::after {
+            content: 'ByteMePlz';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #00ff88, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.8;
+        }
+
+        .intro-text::before {
+            animation: glitch1 0.3s ease-in-out;
+            transform: translateX(-2px);
+            color: #ff0000;
+        }
+
+        .intro-text::after {
+            animation: glitch2 0.3s ease-in-out;
+            transform: translateX(2px);
+            color: #00ffff;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glitch1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(-2px); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translateX(2px); }
+            40% { clip-path: inset(40% 0 40% 0); transform: translateX(-2px); }
+            60% { clip-path: inset(60% 0 20% 0); transform: translateX(2px); }
+            80% { clip-path: inset(80% 0 0% 0); transform: translateX(-2px); }
+        }
+
+        @keyframes glitch2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(2px); }
+            20% { clip-path: inset(60% 0 20% 0); transform: translateX(-2px); }
+            40% { clip-path: inset(40% 0 40% 0); transform: translateX(2px); }
+            60% { clip-path: inset(20% 0 60% 0); transform: translateX(-2px); }
+            80% { clip-path: inset(0% 0 80% 0); transform: translateX(2px); }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #ff00ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #a0a0a0;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,0,0,0.2);
+            border: 1px solid #ff0040;
+            color: #ff0040;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #ff0040; }
+            to { box-shadow: 0 0 20px #ff0040, 0 0 40px #ff0040; }
+        }
+
+        /* Updates Section */
+        .updates {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid #00ff88;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 0 10px 10px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .updates h2 {
+            font-family: 'Orbitron', monospace;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .updates h2::before {
+            content: '⚡';
+        }
+
+        .update-item {
+            color: #b0b0b0;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .update-item::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+        }
+
+        .update-item.feature {
+            color: #ffd700;
+            margin-top: 1rem;
+        }
+
+        /* Category Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .category {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .category:nth-child(1) { animation-delay: 2.2s; }
+        .category:nth-child(2) { animation-delay: 2.4s; }
+        .category:nth-child(3) { animation-delay: 2.6s; }
+        .category:nth-child(4) { animation-delay: 2.8s; }
+        .category:nth-child(5) { animation-delay: 3.0s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0,255,136,0.3);
+        }
+
+        .category h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-subtitle {
+            color: #ff0040;
+            font-size: 0.9rem;
+            margin-left: auto;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Grid Layout for Links */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .link-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .link-card:hover::before {
+            left: 100%;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.2);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .link-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .link-url {
+            color: #00d4ff;
+            font-size: 0.85rem;
+            word-break: break-all;
+            opacity: 0.8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .link-card:hover .link-url {
+            color: #00ff88;
+        }
+
+        .link-note {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        /* Special styling for different categories */
+        .category.known .link-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.2);
+        }
+
+        .category.unknown .link-card:hover {
+            border-color: #ff9500;
+            box-shadow: 0 10px 30px rgba(255,149,0,0.2);
+        }
+
+        .category.movies .link-card:hover {
+            border-color: #ff006e;
+            box-shadow: 0 10px 30px rgba(255,0,110,0.2);
+        }
+
+        .category.music .link-card:hover {
+            border-color: #8338ec;
+            box-shadow: 0 10px 30px rgba(131,56,236,0.2);
+        }
+
+        .category.ai .link-card:hover {
+            border-color: #ffbe0b;
+            box-shadow: 0 10px 30px rgba(255,190,11,0.2);
+        }
+
+        /* Full-width links for movies */
+        .movie-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .movie-link {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .movie-link:hover {
+            background: rgba(255,0,110,0.1);
+            border-color: #ff006e;
+            transform: translateX(10px);
+        }
+
+        .movie-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .movie-year {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #666;
+        }
+
+        .footer-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #ff0040, #ff9500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00ff88, #00d4ff);
+            border-radius: 5px;
+        }
+
+        /* Background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .link-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                letter-spacing: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Animation -->
+    <div class="intro-overlay">
+        <div class="intro-text">ByteMePlz</div>
+    </div>
+
+    <!-- Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="version-badge">V3.0 LIVE</div>
+                <h1>ByteMePlz</h1>
+                <p class="hero-subtitle">
+                    The ultimate unblocked entertainment hub. Games, movies, music, and AI tools—all in one place. 
+                    Built for students, by students.
+                </p>
+            </div>
+        </section>
+
+        <!-- Updates -->
+        <div class="updates">
+            <h2>Latest Updates</h2>
+            <div class="update-item">V3: Added AI cheating 101 section</div>
+            <div class="update-item">V2: Expanded movies and music collections</div>
+            <div class="update-item">V1: Initial release with known and unknown sites</div>
+            <div class="update-item feature">Feature: Custom proxy browser coming soon (HTML-based for school bypass)</div>
+        </div>
+
+        <div class="container">
+            <!-- Known Sites -->
+            <section class="category known">
+                <div class="category-header">
+                    <div class="category-icon">🎮</div>
+                    <h2>Popular Gaming Sites</h2>
+                </div>
+                <div class="link-grid">
+                    <a href="https://now.gg/" class="link-card" target="_blank">
+                        <div class="link-title">Now.gg</div>
+                        <div class="link-url">now.gg</div>
+                    </a>
+                    <a href="https://poki.com/" class="link-card" target="_blank">
+                        <div class="link-title">Poki</div>
+                        <div class="link-url">poki.com</div>
+                    </a>
+                    <a href="https://thepizzaedition-games.github.io/" class="link-card" target="_blank">
+                        <div class="link-title">The Pizza Edition</div>
+                        <div class="link-url">thepizzaedition-games.github.io</div>
+                    </a>
+                    <a href="https://www.crazygames.com/" class="link-card" target="_blank">
+                        <div class="link-title">Crazy Games</div>
+                        <div class="link-url">crazygames.com</div>
+                    </a>
+                    <a href="https://sites.google.com/view/drive-u-7-home/home" class="link-card" target="_blank">
+                        <div class="link-title">G+</div>
+                        <div class="link-url">sites.google.com/view/drive-u-7-home</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Unknown Sites -->
+            <section class="category unknown">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #ff9500, #ff0040);">🔓</div>
+                    <h2>Underground Sites</h2>
+                    <span class="category-subtitle">Lesser known, more likely to work</span>
+                </div>
+                <div class="link-grid">
+                    <a href="https://deltamath.interdoge.cfd.cdn.cloudflare.net/" class="link-card" target="_blank">
+                        <div class="link-title">Dogeub</div>
+                        <div class="link-url">deltamath.interdoge.cfd...</div>
+                        <div class="link-note">⚠️ Avoid Settings/Apps - triggers block</div>
+                    </a>
+                    <a href="https://cheesestorecedarhurst.com/" class="link-card" target="_blank">
+                        <div class="link-title">Reds Exploit Center #1</div>
+                        <div class="link-url">cheesestorecedarhurst.com</div>
+                    </a>
+                    <a href="https://rs.gmsgroup.app/" class="link-card" target="_blank">
+                        <div class="link-title">Reds Exploit Center #2</div>
+                        <div class="link-url">rs.gmsgroup.app</div>
+                    </a>
+                    <a href="https://nowgg.fun/apps/uncube/7074/now.html" class="link-card" target="_blank">
+                        <div class="link-title">Now.gg Mirror</div>
+                        <div class="link-url">nowgg.fun</div>
+                    </a>
+                    <a href="https://games.macrolorblx.com/" class="link-card" target="_blank">
+                        <div class="link-title">Macro Games</div>
+                        <div class="link-url">games.macrolorblx.com</div>
+                    </a>
+                    <a href="https://field.school.embeddedonline.org/" class="link-card" target="_blank">
+                        <div class="link-title">Utopia #1</div>
+                        <div class="link-url">field.school.embeddedonline.org</div>
+                    </a>
+                    <a href="https://debate.brain.maniel.one.pl/" class="link-card" target="_blank">
+                        <div class="link-title">Utopia #2</div>
+                        <div class="link-url">debate.brain.maniel.one.pl</div>
+                    </a>
+                    <a href="https://blog.artweb.website.cdn.cloudflare.net/" class="link-card" target="_blank">
+                        <div class="link-title">DayDream #1</div>
+                        <div class="link-url">blog.artweb.website...</div>
+                    </a>
+                    <a href="https://vermontisfake.org/" class="link-card" target="_blank">
+                        <div class="link-title">DayDream #2</div>
+                        <div class="link-url">vermontisfake.org</div>
+                    </a>
+                    <a href="https://daydreaming.env.pm/" class="link-card" target="_blank">
+                        <div class="link-title">DayDream #3</div>
+                        <div class="link-url">daydreaming.env.pm</div>
+                    </a>
+                    <a href="https://nautilus-os.vercel.app/" class="link-card" target="_blank">
+                        <div class="link-title">NautilusOS</div>
+                        <div class="link-url">nautilus-os.vercel.app</div>
+                    </a>
+                    <a href="https://untitledproxy.pages.dev/" class="link-card" target="_blank">
+                        <div class="link-title">Max's Games/UnknownProxy</div>
+                        <div class="link-url">untitledproxy.pages.dev</div>
+                    </a>
+                    <a href="https://sites.google.com/view/classroom6x/" class="link-card" target="_blank">
+                        <div class="link-title">Classroom 6X</div>
+                        <div class="link-url">sites.google.com/view/classroom6x</div>
+                    </a>
+                    <a href="https://history.lodgegomantak.org/" class="link-card" target="_blank">
+                        <div class="link-title">Kazwire #1</div>
+                        <div class="link-url">history.lodgegomantak.org</div>
+                    </a>
+                    <a href="https://art.lexvoip.com/" class="link-card" target="_blank">
+                        <div class="link-title">Kazwire #2</div>
+                        <div class="link-url">art.lexvoip.com</div>
+                    </a>
+                    <a href="https://d2edvleactrkkb.cloudfront.net/" class="link-card" target="_blank">
+                        <div class="link-title">Big Mac Heros</div>
+                        <div class="link-url">d2edvleactrkkb.cloudfront.net</div>
+                    </a>
+                    <a href="https://idyllic-choux-ce6d8a.netlify.app/g/" class="link-card" target="_blank">
+                        <div class="link-title">Bigfoot's Game Shack</div>
+                        <div class="link-url">idyllic-choux-ce6d8a.netlify.app</div>
+                    </a>
+                    <a href="https://hotkitchenbag.com/" class="link-card" target="_blank">
+                        <div class="link-title">Roblox Unblocker #1</div>
+                        <div class="link-url">hotkitchenbag.com</div>
+                    </a>
+                    <a href="https://websitesbridge.com/" class="link-card" target="_blank">
+                        <div class="link-title">Roblox Unblocker #2</div>
+                        <div class="link-url">websitesbridge.com</div>
+                    </a>
+                    <a href="https://nowgg.co/play/roblox-corporation/5349/roblox" class="link-card" target="_blank">
+                        <div class="link-title">Roblox Unblocker #3</div>
+                        <div class="link-url">nowgg.co</div>
+                    </a>
+                    <a href="https://weblfg.onrender.com/" class="link-card" target="_blank">
+                        <div class="link-title">WebLFG #1</div>
+                        <div class="link-url">weblfg.onrender.com</div>
+                    </a>
+                    <a href="https://biochemistry.onrender.com/" class="link-card" target="_blank">
+                        <div class="link-title">WebLFG #2</div>
+                        <div class="link-url">biochemistry.onrender.com</div>
+                    </a>
+                    <a href="https://googleclassroom.netlify.app/activities" class="link-card" target="_blank">
+                        <div class="link-title">Noodle Activities #1</div>
+                        <div class="link-url">googleclassroom.netlify.app</div>
+                    </a>
+                    <a href="https://billnye.netlify.app/activities" class="link-card" target="_blank">
+                        <div class="link-title">Noodle Activities #2</div>
+                        <div class="link-url">billnye.netlify.app</div>
+                    </a>
+                    <a href="https://earnest-tarsier-3c02d1.netlify.app/activities" class="link-card" target="_blank">
+                        <div class="link-title">Noodle Activities #3</div>
+                        <div class="link-url">earnest-tarsier-3c02d1.netlify.app</div>
+                    </a>
+                    <a href="https://lioxrytbackup.netlify.app/" class="link-card" target="_blank">
+                        <div class="link-title">Lioxryt</div>
+                        <div class="link-url">lioxrytbackup.netlify.app</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Archives -->
+            <section class="category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #8338ec, #ff006e);">📁</div>
+                    <h2>Game Archives</h2>
+                </div>
+                <div class="link-grid">
+                    <a href="https://sites.google.com/view/wolfunblock/home?authuser=0" class="link-card" target="_blank">
+                        <div class="link-title">Wolf Unblock</div>
+                        <div class="link-url">sites.google.com/view/wolfunblock</div>
+                    </a>
+                    <a href="https://sites.google.com/view/pizzaedition/home" class="link-card" target="_blank">
+                        <div class="link-title">Pizza Edition Archive</div>
+                        <div class="link-url">sites.google.com/view/pizzaedition</div>
+                    </a>
+                    <a href="https://sites.google.com/view/tripplethepotatoes/home?authuser=0" class="link-card" target="_blank">
+                        <div class="link-title">Tripple The Potatoes</div>
+                        <div class="link-url">sites.google.com/view/tripplethepotatoes</div>
+                    </a>
+                    <a href="https://sites.google.com/view/lotsogames/home" class="link-card" target="_blank">
+                        <div class="link-title">Lots O Games</div>
+                        <div class="link-url">sites.google.com/view/lotsogames</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Movies -->
+            <section class="category movies">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #ff006e, #ffbe0b);">🎬</div>
+                    <h2>Movies Collection</h2>
+                    <span class="category-subtitle">Google Drive Links</span>
+                </div>
+                <div class="movie-list">
+                    <a href="https://drive.google.com/file/d/1OyO1OdhtfwR883Uvi0QPP5iooGcxTVSY/view?usp=drive_link" class="movie-link" target="_blank">
+                        <span class="movie-name">Five Nights at Freddy's</span>
+                        <span class="movie-year">2023</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1OsyF2LKJqjtv0b2Xd9GWOLcYkzny3VZo/view?usp=drive_link" class="movie-link" target="_blank">
+                        <span class="movie-name">The Super Mario Bros. Movie</span>
+                        <span class="movie-year">2023</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/106N7zd611ShtPMOx97XwFSxkg8theQLN/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Cars</span>
+                        <span class="movie-year">2006</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/194M4dGCwh1hTxVM1-_axnLSdt4trnbK2/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Coco</span>
+                        <span class="movie-year">2017</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1y5q4v_Sx6Kj9nIrNjaAbCVcX36nRC3qB/view?ts=6717b8cf" class="movie-link" target="_blank">
+                        <span class="movie-name">Encanto</span>
+                        <span class="movie-year">2021</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/11CN0fT7CwCHgz__mY4FWjcoT5w_wZD9S/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Finding Nemo</span>
+                        <span class="movie-year">2003</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1hpUpKEdeT9ta-8FjSpMUAXw17E-8uwIY/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Frozen II</span>
+                        <span class="movie-year">2019</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1tVsDrCHeADhoZRkQZnXIIj3R5kpB2une/view" class="movie-link" target="_blank">
+                        <span class="movie-name">The Incredibles</span>
+                        <span class="movie-year">2004</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1SABVZNMwHTME4hsFwL9IWyWZPKDTBSoT/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Inside Out 2</span>
+                        <span class="movie-year">2024</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1yx66GkjBaCwjcMNoovV8w9yPNlZ7Q4Gu/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Maleficent</span>
+                        <span class="movie-year">2014</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1EsX8k7nfYQrzC6apqJqnyfH7HLAHl31G/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Moana</span>
+                        <span class="movie-year">2016</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1iVJq1FsNG577gesP7CaTWPLgdqAtnaEg/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Moana 2</span>
+                        <span class="movie-year">2024</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1lmlVArBa1cDynHvvDOddrMnCPvYaFVeK/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Monsters, Inc.</span>
+                        <span class="movie-year">2001</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1VcUlwoH5kBsHK6vYEMYMJuhpYgTCng20/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Luca</span>
+                        <span class="movie-year">2021</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1kjVDdXtZ3-O0SndMHeIwMXe4jNZJ4w2C/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Ratatouille</span>
+                        <span class="movie-year">2007</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1bFUbsQ9VEazeCt5l_VBVDtjCsbJmZ_Vr/preview" class="movie-link" target="_blank">
+                        <span class="movie-name">Toy Story 4</span>
+                        <span class="movie-year">2019</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/0B9konOTuvSYRQTl2Nmp6NkpjSG8/view?resourcekey=0-gT34eT_Bn7WLDxwX3U41fw" class="movie-link" target="_blank">
+                        <span class="movie-name">WALL·E</span>
+                        <span class="movie-year">2008</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1HYeIrbf8A-vfvJsvYP59AQzG9l8nt03h/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Zootopia</span>
+                        <span class="movie-year">2016</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1UsxNtlBxGFp955GwEB-s8wYJCA6bXt7e/view" class="movie-link" target="_blank">
+                        <span class="movie-name">Avengers: Endgame</span>
+                        <span class="movie-year">2019</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1aBzsoTJAjhZeFFDkIV2SN7p7ZHagUEDc/view?t=1" class="movie-link" target="_blank">
+                        <span class="movie-name">Deadpool & Wolverine</span>
+                        <span class="movie-year">2024</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1nDgCNAuFgSI6fDKbRZFkDhzViib1ixYS/view?usp=drive_link" class="movie-link" target="_blank">
+                        <span class="movie-name">Star Wars (A New Hope)</span>
+                        <span class="movie-year">1977</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1q0Jof59Il_So2z5Q38ANn55qB2GCpOx3/view?usp=drive_link" class="movie-link" target="_blank">
+                        <span class="movie-name">Star Wars: The Empire Strikes Back</span>
+                        <span class="movie-year">1980</span>
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/1sxtovwaj9nvEa_KZjxPjK1n03tSjR1yU" class="movie-link" target="_blank">
+                        <span class="movie-name">The Dark Knight Trilogy</span>
+                        <span class="movie-year">2005-2012</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1__wCd7uV9s7qY-o7qZ6F1lO9UQPV7B90/view?usp=drive_link" class="movie-link" target="_blank">
+                        <span class="movie-name">Joker</span>
+                        <span class="movie-year">2019</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Music -->
+            <section class="category music">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #3a86ff, #8338ec);">🎵</div>
+                    <h2>Music Playlists</h2>
+                    <span class="category-subtitle">Kanye West & Tyler, The Creator Archives</span>
+                </div>
+                <div class="link-grid">
+                    <a href="https://untitled.stream/library/project/LR94pKICudarIIsoKE43Q" class="link-card" target="_blank">
+                        <div class="link-title">KANYE WEST: YANDHI</div>
+                        <div class="link-url">31 tracks • 1h 50m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/SxhcFIlbTSTtBAKJbUdiQ" class="link-card" target="_blank">
+                        <div class="link-title">DONDA 2: FOR MAMA</div>
+                        <div class="link-url">39 tracks • 2h 3m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/IzifbXVhUjA9uo2rM9XLP" class="link-card" target="_blank">
+                        <div class="link-title">DONDA 2.0</div>
+                        <div class="link-url">25 tracks • 2h 12m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/X3PTFiYaNADrj5Fvcspyz" class="link-card" target="_blank">
+                        <div class="link-title">DONDA 3</div>
+                        <div class="link-url">18 tracks • 1h 3m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/YK4Rl9CwHviaZ8wewr1sw" class="link-card" target="_blank">
+                        <div class="link-title">BULLY</div>
+                        <div class="link-url">16 tracks • 52m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/JdQTAbufCUGRp9hOlXgkK" class="link-card" target="_blank">
+                        <div class="link-title">YEPHORIA</div>
+                        <div class="link-url">17 tracks • 1h 17m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/2prAs3il0Fo2NeIwyv9oK" class="link-card" target="_blank">
+                        <div class="link-title">JESUS IS EVERYTHING</div>
+                        <div class="link-url">24 tracks • 1h 38m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/l3wckbUigGGC4Id1GapgY" class="link-card" target="_blank">
+                        <div class="link-title">TRUE PROPHETS</div>
+                        <div class="link-url">16 tracks • 1h 44m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/90p9s5Y8uneuqVrPGNDAM" class="link-card" target="_blank">
+                        <div class="link-title">SAVE ME GOD</div>
+                        <div class="link-url">15 tracks • 52m 53s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/GfJrB0KLLlr4N7rSxMssc" class="link-card" target="_blank">
+                        <div class="link-title">YEEZUS 2</div>
+                        <div class="link-url">13 tracks • 56m 52s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/sEJCgq1DEtUgGMNDxnbuA" class="link-card" target="_blank">
+                        <div class="link-title">GOOD A JOB*</div>
+                        <div class="link-url">18 tracks • 1h 19m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/kWehVkoYhtJ0aOVtZpDIg" class="link-card" target="_blank">
+                        <div class="link-title">SO HELP ME GOD</div>
+                        <div class="link-url">10 tracks • 35m 39s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/3kE7C4VCdSR2tfDQMMv18" class="link-card" target="_blank">
+                        <div class="link-title">WATCH THE FLAMES</div>
+                        <div class="link-url">12 tracks • 51m 5s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/2j7QPD656SnIGZ3SfchF3" class="link-card" target="_blank">
+                        <div class="link-title">WATCH THE THRONE 2</div>
+                        <div class="link-url">11 tracks • 34m 25s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/s18s1Nj0udxUvCQskxjnc" class="link-card" target="_blank">
+                        <div class="link-title">ALL HALLOWS EVE DELUXE</div>
+                        <div class="link-url">21 tracks • 1h 28m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/9kCmFKb3iWKF99cFMl2uz" class="link-card" target="_blank">
+                        <div class="link-title">ALL HALLOWS EVE</div>
+                        <div class="link-url">16 tracks • 1h 8m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/VoxXW8iioQkfrpbqN5K0A" class="link-card" target="_blank">
+                        <div class="link-title">MBDTF DELUXE</div>
+                        <div class="link-url">25 tracks • 1h 45m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/eCMQtVt5dKihqutHt85gQ" class="link-card" target="_blank">
+                        <div class="link-title">YE</div>
+                        <div class="link-url">14 tracks • 44m 29s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/jZSHZHORLjhuSnZy3G0JA" class="link-card" target="_blank">
+                        <div class="link-title">CARTI YE</div>
+                        <div class="link-url">14 tracks • 34m 38s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/t6eCBccrSbv7sdANzGMZ9" class="link-card" target="_blank">
+                        <div class="link-title">YEBU</div>
+                        <div class="link-url">14 tracks • 33m 47s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/gjLjksokuAyVRyZmXY4og" class="link-card" target="_blank">
+                        <div class="link-title">WAR</div>
+                        <div class="link-url">10 tracks • 26m 53s</div>
+                    </a>
+                    <a href="https://mega.nz/folder/Y4A1mKRA#2BshAph7jOKavSew7rkaBQ" class="link-card" target="_blank">
+                        <div class="link-title">KANYE MEGATHREAD</div>
+                        <div class="link-url">Full Archive • Mega.nz</div>
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/1cdRnxfgnap4nQ4yq4Cw4pAiOXmOr9p0u" class="link-card" target="_blank">
+                        <div class="link-title">TYLER: IGOR ALT VERSIONS</div>
+                        <div class="link-url">12 tracks • 57m 5s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/5V8BYQxpjoYR0HAMJIzmR" class="link-card" target="_blank">
+                        <div class="link-title">(OG) IGOR</div>
+                        <div class="link-url">14 tracks • 1h 14m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/LnwXPmM0NUPvCKwPMUjsk" class="link-card" target="_blank">
+                        <div class="link-title">CMIYGL (OG)</div>
+                        <div class="link-url">11 tracks • 1h 9m</div>
+                    </a>
+                    <a href="https://untitled.stream/library/project/3KyKD3jANwaznTqImTVwn" class="link-card" target="_blank">
+                        <div class="link-title">FLOWER BOY: THE OUTTAKES</div>
+                        <div class="link-url">12 tracks • 28m 34s</div>
+                    </a>
+                    <a href="https://untitled.stream/library/folder/sbybJSTQjv19a6CUheNAO" class="link-card" target="_blank">
+                        <div class="link-title">TYLER FOLDER</div>
+                        <div class="link-url">28 albums • Full Collection</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- AI Cheating 101 -->
+            <section class="category ai">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #ffbe0b, #ff006e);">🤖</div>
+                    <h2>AI Cheating 101</h2>
+                    <span class="category-subtitle">Use Responsibly</span>
+                </div>
+                
+                <h3 style="color: #ffbe0b; margin: 2rem 0 1rem 0; font-family: 'Orbitron', monospace;">AI Assistants</h3>
+                <div class="link-grid">
+                    <a href="https://www.kimi.com/" class="link-card" target="_blank">
+                        <div class="link-title">Kimi AI</div>
+                        <div class="link-url">kimi.com</div>
+                    </a>
+                    <a href="https://chatgpt.com/" class="link-card" target="_blank">
+                        <div class="link-title">ChatGPT</div>
+                        <div class="link-url">chatgpt.com</div>
+                    </a>
+                    <a href="https://www.perplexity.ai/" class="link-card" target="_blank">
+                        <div class="link-title">Perplexity AI</div>
+                        <div class="link-url">perplexity.ai</div>
+                    </a>
+                    <a href="https://claude.ai/login" class="link-card" target="_blank">
+                        <div class="link-title">Claude</div>
+                        <div class="link-url">claude.ai</div>
+                    </a>
+                    <a href="https://gemini.google.com/" class="link-card" target="_blank">
+                        <div class="link-title">Google Gemini</div>
+                        <div class="link-url">gemini.google.com</div>
+                    </a>
+                    <a href="https://poe.com/login?redirect_url=%2F" class="link-card" target="_blank">
+                        <div class="link-title">Poe</div>
+                        <div class="link-url">poe.com</div>
+                    </a>
+                </div>
+
+                <h3 style="color: #ffbe0b; margin: 2rem 0 1rem 0; font-family: 'Orbitron', monospace;">Math Solvers</h3>
+                <div class="link-grid">
+                    <a href="https://photomath.com/" class="link-card" target="_blank">
+                        <div class="link-title">Photomath</div>
+                        <div class="link-url">photomath.com</div>
+                    </a>
+                    <a href="https://www.mathway.com/Algebra" class="link-card" target="_blank">
+                        <div class="link-title">Mathway</div>
+                        <div class="link-url">mathway.com</div>
+                    </a>
+                    <a href="https://www.symbolab.com/" class="link-card" target="_blank">
+                        <div class="link-title">Symbolab</div>
+                        <div class="link-url">symbolab.com</div>
+                    </a>
+                    <a href="https://www.wolframalpha.com/" class="link-card" target="_blank">
+                        <div class="link-title">WolframAlpha</div>
+                        <div class="link-url">wolframalpha.com</div>
+                    </a>
+                </div>
+
+                <h3 style="color: #ffbe0b; margin: 2rem 0 1rem 0; font-family: 'Orbitron', monospace;">Homework Help</h3>
+                <div class="link-grid">
+                    <a href="https://www.chegg.com/" class="link-card" target="_blank">
+                        <div class="link-title">Chegg</div>
+                        <div class="link-url">chegg.com</div>
+                    </a>
+                    <a href="https://www.coursehero.com/" class="link-card" target="_blank">
+                        <div class="link-title">Course Hero</div>
+                        <div class="link-url">coursehero.com</div>
+                    </a>
+                    <a href="https://brainly.com/" class="link-card" target="_blank">
+                        <div class="link-title">Brainly</div>
+                        <div class="link-url">brainly.com</div>
+                    </a>
+                </div>
+
+                <h3 style="color: #ffbe0b; margin: 2rem 0 1rem 0; font-family: 'Orbitron', monospace;">AI Humanizers</h3>
+                <div class="link-grid">
+                    <a href="https://rewritify.ai/" class="link-card" target="_blank">
+                        <div class="link-title">Rewritify</div>
+                        <div class="link-url">rewritify.ai</div>
+                    </a>
+                    <a href="http://humanize.ai" class="link-card" target="_blank">
+                        <div class="link-title">Humanize.ai</div>
+                        <div class="link-url">humanize.ai</div>
+                    </a>
+                    <a href="http://humanizeai.com" class="link-card" target="_blank">
+                        <div class="link-title">HumanizeAI.com</div>
+                        <div class="link-url">humanizeai.com</div>
+                    </a>
+                    <a href="https://www.humanizeai.pro/" class="link-card" target="_blank">
+                        <div class="link-title">HumanizeAI Pro</div>
+                        <div class="link-url">humanizeai.pro</div>
+                    </a>
+                    <a href="https://aihumanize.io/" class="link-card" target="_blank">
+                        <div class="link-title">AI Humanize</div>
+                        <div class="link-url">aihumanize.io</div>
+                    </a>
+                    <a href="https://www.grammarly.com/ai-humanizer" class="link-card" target="_blank">
+                        <div class="link-title">Grammarly AI Humanizer</div>
+                        <div class="link-url">grammarly.com/ai-humanizer</div>
+                    </a>
+                    <a href="https://www.humanizeai.io/" class="link-card" target="_blank">
+                        <div class="link-title">HumanizeAI.io</div>
+                        <div class="link-url">humanizeai.io</div>
+                    </a>
+                    <a href="https://gpthuman.ai/" class="link-card" target="_blank">
+                        <div class="link-title">GPT Human</div>
+                        <div class="link-url">gpthuman.ai</div>
+                    </a>
+                    <a href="https://unaimytext.com/" class="link-card" target="_blank">
+                        <div class="link-title">UnAI My Text</div>
+                        <div class="link-url">unaimytext.com</div>
+                    </a>
+                    <a href="https://stealthwriter.ai/" class="link-card" target="_blank">
+                        <div class="link-title">Stealth Writer</div>
+                        <div class="link-url">stealthwriter.ai</div>
+                    </a>
+                    <a href="https://www.undetectableai.pro/" class="link-card" target="_blank">
+                        <div class="link-title">Undetectable AI Pro</div>
+                        <div class="link-url">undetectableai.pro</div>
+                    </a>
+                    <a href="https://undetectable.ai/ai-humanizer" class="link-card" target="_blank">
+                        <div class="link-title">Undetectable.ai</div>
+                        <div class="link-url">undetectable.ai</div>
+                    </a>
+                    <a href="https://mydetector.ai/ai-humanizer/" class="link-card" target="_blank">
+                        <div class="link-title">MyDetector AI Humanizer</div>
+                        <div class="link-url">mydetector.ai</div>
+                    </a>
+                    <a href="https://walterwrites.ai/" class="link-card" target="_blank">
+                        <div class="link-title">Walter Writes</div>
+                        <div class="link-url">walterwrites.ai</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Proxy Browser -->
+            <section class="category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #ff0040, #ff9500);">🌐</div>
+                    <h2>Proxy Browser</h2>
+                    <span class="category-subtitle">Experimental</span>
+                </div>
+                <div class="link-grid">
+                    <a href="https://testingbmp.edgeone.app" class="link-card" target="_blank">
+                        <div class="link-title">TestingBMP</div>
+                        <div class="link-url">testingbmp.edgeone.app</div>
+                        <div class="link-note">⚠️ Currently not working - development in progress</div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-text">MORE SOON</div>
+            <p style="margin-top: 1rem; color: #444;">Stay tuned for updates • ByteMePlz 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Add hover sound effect (optional - subtle)
+        document.querySelectorAll('.link-card, .movie-link').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = this.classList.contains('movie-link') ? 'translateX(10px)' : 'translateY(-5px)';
+            });
+        });
+
+        // Smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>
