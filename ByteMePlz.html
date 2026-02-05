@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ByteMePlz V4.0</title>
+    <title>ByteMePlz V5.0 | Educational Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,69 +13,65 @@
             box-sizing: border-box;
         }
 
-        body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --dark: #0f0f1a;
+            --darker: #050510;
+            --card-bg: #12121a;
+            --card-hover: #1a1a2e;
+            --border: #2a2a40;
+            --text: #e6f7ff;
+            --text-muted: #8899a6;
+            --accent-pink: #ff6b9d;
+            --accent-purple: #c77dff;
+            --accent-orange: #ff9e00;
+            --accent-blue: #4dabf7;
+            --accent-yellow: #ffd43b;
+            --accent-red: #ff6b6b;
+            --gradient-1: linear-gradient(135deg, #00d4ff, #9d4edd);
+            --gradient-2: linear-gradient(135deg, #ff6b9d, #c77dff);
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.4);
         }
 
-        /* Intro Animation */
-        .intro-overlay {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(157, 78, 221, 0.03) 0%, transparent 50%);
+        }
+
+        /* Loading Screen */
+        #loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: var(--darker);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            animation: fadeOut 0.5s ease-in-out 2.5s forwards;
-            pointer-events: none;
+            transition: opacity 0.5s;
         }
 
-        .intro-text {
+        .loading-text {
             font-family: 'Orbitron', monospace;
             font-size: clamp(2rem, 8vw, 5rem);
             font-weight: 900;
-            background: linear-gradient(45deg, #00ff88, #00d4ff, #ff00ff, #00ff88);
+            background: var(--gradient-1);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 2s ease infinite, glitch 0.3s ease-in-out;
-            text-align: center;
+            animation: gradientShift 3s ease infinite;
             letter-spacing: 4px;
-            position: relative;
-        }
-
-        .intro-text::before,
-        .intro-text::after {
-            content: 'ByteMePlz';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #00ff88, #00d4ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0.8;
-        }
-
-        .intro-text::before {
-            animation: glitch1 0.3s ease-in-out;
-            transform: translateX(-2px);
-            color: #ff0000;
-        }
-
-        .intro-text::after {
-            animation: glitch2 0.3s ease-in-out;
-            transform: translateX(2px);
-            color: #00ffff;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
         }
 
         @keyframes gradientShift {
@@ -83,265 +80,450 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes glitch1 {
-            0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(-2px); }
-            20% { clip-path: inset(20% 0 60% 0); transform: translateX(2px); }
-            40% { clip-path: inset(40% 0 40% 0); transform: translateX(-2px); }
-            60% { clip-path: inset(60% 0 20% 0); transform: translateX(2px); }
-            80% { clip-path: inset(80% 0 0% 0); transform: translateX(-2px); }
+        /* Main Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
-        @keyframes glitch2 {
-            0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(2px); }
-            20% { clip-path: inset(60% 0 20% 0); transform: translateX(-2px); }
-            40% { clip-path: inset(40% 0 40% 0); transform: translateX(2px); }
-            60% { clip-path: inset(20% 0 60% 0); transform: translateX(-2px); }
-            80% { clip-path: inset(0% 0 80% 0); transform: translateX(2px); }
+        .app-container.loaded {
+            opacity: 1;
         }
 
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
+        /* Sidebar */
+        .nav-container {
+            width: 80px;
+            background: var(--dark);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--darker);
+            transition: all 0.3s;
+            box-shadow: var(--glow-blue);
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.6);
+        }
+
+        .nav-list {
+            list-style: none;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--card-bg);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            width: 3px;
+            height: 24px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .nav-item i {
+            font-size: 22px;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .nav-item.active i, .nav-item:hover i {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-tooltip {
+            position: absolute;
+            left: 70px;
+            background: var(--card-bg);
+            padding: 8px 14px;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            font-size: 12px;
+            z-index: 200;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transform: translateX(-10px);
+        }
+
+        .nav-item:hover .nav-tooltip {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* Main Content */
         .main-content {
-            opacity: 0;
-            animation: fadeIn 1s ease-in-out 2s forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 60vh;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
+        /* Top Bar */
+        .top-bar {
+            height: 70px;
+            background: rgba(15, 15, 26, 0.8);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            backdrop-filter: blur(20px);
+            z-index: 50;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--darker);
+            border-radius: 12px;
+            padding: 12px 20px;
+            width: 420px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
         }
 
-        .hero-content {
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--glow-blue);
+        }
+
+        .search-box i {
+            color: var(--text-muted);
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .top-btn {
+            padding: 10px 24px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
             position: relative;
-            z-index: 1;
+            overflow: hidden;
         }
 
-        .hero h1 {
+        .top-btn.primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: var(--glow-blue);
+        }
+
+        .top-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .top-btn.secondary {
+            background: var(--card-bg);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .top-btn.secondary:hover {
+            background: var(--card-hover);
+            border-color: var(--accent-pink);
+            color: var(--accent-pink);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: transparent;
+        }
+
+        .content-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-area::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        .content-area::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .content-area::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
             font-family: 'Orbitron', monospace;
-            font-size: clamp(2.5rem, 10vw, 6rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #ff00ff 100%);
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            letter-spacing: -2px;
-            animation: titleFloat 3s ease-in-out infinite;
         }
 
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: #a0a0a0;
-            max-width: 600px;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .section-header h2 i {
+            color: var(--primary);
+            -webkit-text-fill-color: var(--primary);
         }
 
         .version-badge {
             display: inline-block;
-            background: rgba(255,0,0,0.2);
-            border: 1px solid #ff0040;
-            color: #ff0040;
-            padding: 0.5rem 1.5rem;
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.6rem 1.5rem;
             border-radius: 50px;
             font-family: 'Orbitron', monospace;
             font-size: 0.9rem;
-            margin-bottom: 2rem;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 5px #ff0040; }
-            to { box-shadow: 0 0 20px #ff0040, 0 0 40px #ff0040; }
-        }
-
-        /* Updates Section */
-        .updates {
-            background: rgba(255,255,255,0.03);
-            border-left: 3px solid #00ff88;
-            padding: 1.5rem;
-            margin: 2rem auto;
-            max-width: 800px;
-            border-radius: 0 10px 10px 0;
-            backdrop-filter: blur(10px);
-        }
-
-        .updates h2 {
-            font-family: 'Orbitron', monospace;
-            color: #00ff88;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 5px rgba(0, 212, 255, 0.2); }
+            to { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(157, 78, 221, 0.2); }
+        }
+
+        /* Updates */
+        .updates {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(157, 78, 221, 0.05));
+            border-left: 3px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 16px 16px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-left-width: 3px;
+        }
+
+        .updates h3 {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .updates h2::before {
-            content: '⚡';
+            gap: 8px;
         }
 
         .update-item {
-            color: #b0b0b0;
-            margin: 0.5rem 0;
+            color: var(--text-muted);
+            margin: 0.6rem 0;
             font-size: 0.95rem;
             padding-left: 1.5rem;
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .update-item:hover {
+            color: var(--text);
+            transform: translateX(4px);
         }
 
         .update-item::before {
             content: '→';
             position: absolute;
             left: 0;
-            color: #00d4ff;
+            color: var(--accent-purple);
+            font-weight: bold;
         }
 
         .update-item.feature {
-            color: #ffd700;
-            margin-top: 1rem;
+            color: var(--accent-pink);
+            font-weight: 600;
         }
 
-        /* Category Sections */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        .update-item.feature::before {
+            content: '★';
+            color: var(--accent-pink);
         }
 
+        /* Categories */
         .category {
-            margin-bottom: 4rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.6s ease-out forwards;
-        }
-
-        .category:nth-child(1) { animation-delay: 2.2s; }
-        .category:nth-child(2) { animation-delay: 2.4s; }
-        .category:nth-child(3) { animation-delay: 2.6s; }
-        .category:nth-child(4) { animation-delay: 2.8s; }
-        .category:nth-child(5) { animation-delay: 3.0s; }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            margin-bottom: 3rem;
         }
 
         .category-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border);
         }
 
         .category-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #00ff88, #00d4ff);
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            background: var(--gradient-1);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 0 20px rgba(0,255,136,0.3);
+            box-shadow: var(--glow-blue);
+            animation: float-icon 3s ease-in-out infinite;
         }
 
-        .category h2 {
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .category h3 {
             font-family: 'Orbitron', monospace;
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .category-subtitle {
-            color: #ff0040;
+            color: var(--accent-pink);
             font-size: 0.9rem;
             margin-left: auto;
             font-style: italic;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
-        /* Grid Layout for Links */
+        /* Link Grid */
         .link-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1rem;
         }
 
         .link-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
             padding: 1.25rem;
             transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            display: block;
         }
 
         .link-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .link-card:hover::before {
-            left: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
         }
 
         .link-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff88;
-            box-shadow: 0 10px 30px rgba(0,255,136,0.2);
-            background: rgba(255,255,255,0.08);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--glow-blue);
+        }
+
+        .link-card:hover::before {
+            opacity: 0.05;
         }
 
         .link-title {
@@ -352,123 +534,381 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-title i {
+            color: var(--primary);
         }
 
         .link-url {
-            color: #00d4ff;
+            color: var(--accent-blue);
             font-size: 0.85rem;
             word-break: break-all;
             opacity: 0.8;
             font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 1;
         }
 
         .link-card:hover .link-url {
-            color: #00ff88;
+            color: var(--primary);
+            opacity: 1;
         }
 
         .link-note {
-            color: #ff6b6b;
+            color: var(--accent-pink);
             font-size: 0.8rem;
             margin-top: 0.5rem;
             font-style: italic;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Special styling for different categories */
-        .category.known .link-card:hover {
-            border-color: #00ff88;
-            box-shadow: 0 10px 30px rgba(0,255,136,0.2);
+        .subcategory {
+            color: var(--accent-yellow);
+            margin: 2rem 0 1rem 0;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            border-left: 3px solid var(--accent-yellow);
+            padding-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .category.unknown .link-card:hover {
-            border-color: #ff9500;
-            box-shadow: 0 10px 30px rgba(255,149,0,0.2);
+        /* Movie Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
-        .category.movies .link-card:hover {
-            border-color: #ff006e;
-            box-shadow: 0 10px 30px rgba(255,0,110,0.2);
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+            position: relative;
         }
 
-        .category.music .link-card:hover {
-            border-color: #8338ec;
-            box-shadow: 0 10px 30px rgba(131,56,236,0.2);
+        .content-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-pink);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.2);
         }
 
-        .category.ai .link-card:hover {
-            border-color: #ffbe0b;
-            box-shadow: 0 10px 30px rgba(255,190,11,0.2);
+        .card-image {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            background: var(--border);
+            transition: transform 0.3s;
         }
 
-        /* Full-width links for movies */
-        .movie-list {
+        .content-card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-badges {
+            position: absolute;
+            top: 12px;
+            right: 12px;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 6px;
         }
 
-        .movie-link {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 1rem 1.5rem;
-            text-decoration: none;
-            color: inherit;
+        .card-badge {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-badge.rating {
+            background: linear-gradient(135deg, #ffd43b, #ff9e00);
+            color: #000;
+        }
+
+        .card-badge.bogge {
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            color: white;
+        }
+
+        .card-info {
+            padding: 16px;
+            background: var(--card-bg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
+            color: var(--text-muted);
+            font-size: 12px;
         }
 
-        .movie-link:hover {
-            background: rgba(255,0,110,0.1);
-            border-color: #ff006e;
-            transform: translateX(10px);
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 16, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(20px);
         }
 
-        .movie-name {
-            color: #fff;
-            font-weight: 500;
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s;
         }
 
-        .movie-year {
-            color: #666;
-            font-size: 0.9rem;
-            font-family: 'Courier New', monospace;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: #666;
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .footer-text {
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-close:hover {
+            background: var(--accent-pink);
+            border-color: var(--accent-pink);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--card-bg), transparent);
+        }
+
+        .modal-poster {
+            position: absolute;
+            bottom: -60px;
+            left: 40px;
+            width: 140px;
+            height: 210px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 3px solid var(--card-bg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            z-index: 5;
+        }
+
+        .modal-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 80px 40px 40px;
+        }
+
+        .modal-title {
             font-family: 'Orbitron', monospace;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #ff0040, #ff9500);
+            font-size: 2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: pulse 2s ease-in-out infinite;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+        .modal-overview {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            font-size: 1rem;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #00ff88, #00d4ff);
-            border-radius: 5px;
+        /* Player Options */
+        .player-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
         }
 
-        /* Background particles */
+        .player-btn {
+            background: var(--darker);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .player-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: var(--glow-blue);
+        }
+
+        .player-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .player-btn.bogge {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(157, 78, 221, 0.1));
+            border-color: var(--primary);
+        }
+
+        .player-btn.bogge:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(157, 78, 221, 0.3);
+        }
+
+        .player-btn i {
+            font-size: 36px;
+            color: var(--primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .player-btn.bogge i {
+            color: var(--accent-purple);
+        }
+
+        .player-btn-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .player-btn-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Watch Options Banner */
+        .watch-banner {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(157, 78, 221, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .watch-banner h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+        }
+
+        .watch-banner p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -477,16 +917,17 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         .particle {
             position: absolute;
             width: 2px;
             height: 2px;
-            background: #00ff88;
+            background: var(--primary);
             border-radius: 50%;
-            animation: float 10s infinite linear;
+            animation: float 15s infinite linear;
+            box-shadow: 0 0 10px var(--primary);
         }
 
         @keyframes float {
@@ -496,1238 +937,706 @@
             100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .link-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero h1 {
-                letter-spacing: 0;
-            }
+        /* Side Actions */
+        .side-actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 12px;
         }
 
-        /* Subcategory headers */
-        .subcategory {
-            color: #ffbe0b;
-            margin: 2rem 0 1rem 0;
-            font-family: 'Orbitron', monospace;
-            font-size: 1.1rem;
-            border-left: 3px solid #ffbe0b;
-            padding-left: 1rem;
+        .side-action-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .side-action-btn:hover {
+            background: var(--card-bg);
+            border-color: var(--accent-pink);
+            color: var(--accent-pink);
+            transform: rotate(180deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container { width: 70px; }
+            .search-box { width: 200px; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .link-grid { grid-template-columns: 1fr; }
+            .modal-body { padding: 60px 20px 30px; }
+            .modal-poster { width: 100px; height: 150px; left: 20px; bottom: -40px; }
+        }
+
+        /* Spin Animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Intro Animation -->
-    <div class="intro-overlay">
-        <div class="intro-text">ByteMePlz</div>
+    <!-- Loading Screen -->
+    <div id="loading-overlay">
+        <div class="loading-text">ByteMePlz</div>
+        <div style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem; letter-spacing: 2px;">Loading V5.0 with Bogge.tv...</div>
     </div>
 
-    <!-- Background Particles -->
+    <!-- Particles -->
     <div class="particles" id="particles"></div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="version-badge">V4.0 LIVE</div>
-                <h1>ByteMePlz</h1>
-                <p class="hero-subtitle">
-                    This is ByteMePlz by some1 
-                </p>
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar -->
+        <nav class="nav-container">
+            <div class="nav-logo" onclick="showSection('home')">BMP</div>
+            <ul class="nav-list" id="navList"></ul>
+            <div class="side-actions">
+                <button class="side-action-btn" onclick="refreshData()" title="Refresh">
+                    <i class="ri-refresh-line"></i>
+                </button>
             </div>
-        </section>
+        </nav>
 
-        <!-- Updates -->
-        <div class="updates">
-            <h2>Latest Updates</h2>
-            <div class="update-item">V4: Added more unknown sites and made a site</div>
-            <div class="update-item">V3: Added AI cheating 101 section</div>
-            <div class="update-item">V2: Expanded movies and music collections</div>
-            <div class="update-item">V1: Initial release with known and unknown sites</div>
-            <div class="update-item feature">No Proxy Browser No More Because It Won't Work</div>
-        </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="search-box">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="searchInput" placeholder="Search movies, games..." onkeypress="handleSearch(event)">
+                </div>
+                <div class="top-actions">
+                    <div class="api-status" id="apiStatus">
+                        <i class="ri-wifi-line"></i>
+                        <span>Ready</span>
+                    </div>
+                    <button class="top-btn primary" onclick="showSection('movies')">
+                        <i class="ri-movie-2-line" style="margin-right: 6px;"></i>Movies
+                    </button>
+                    <button class="top-btn secondary" onclick="showSection('sites')">
+                        <i class="ri-gamepad-line" style="margin-right: 6px;"></i>Sites
+                    </button>
+                </div>
+            </div>
 
-        <div class="container">
-            <!-- Known Sites -->
-            <section class="category known">
-                <div class="category-header">
-                    <div class="category-icon">🎮</div>
-                    <h2>Popular Gaming Sites</h2>
-                </div>
-                <div class="link-grid">
-                    <a href="https://now.gg/" class="link-card" target="_blank">
-                        <div class="link-title">Now.gg</div>
-                        <div class="link-url">now.gg</div>
-                    </a>
-                    <a href="https://poki.com/" class="link-card" target="_blank">
-                        <div class="link-title">Poki</div>
-                        <div class="link-url">poki.com</div>
-                    </a>
-                    <a href="https://thepizzaedition-games.github.io/" class="link-card" target="_blank">
-                        <div class="link-title">The Pizza Edition</div>
-                        <div class="link-url">thepizzaedition-games.github.io</div>
-                    </a>
-                    <a href="https://www.crazygames.com/" class="link-card" target="_blank">
-                        <div class="link-title">Crazy Games</div>
-                        <div class="link-url">crazygames.com</div>
-                    </a>
-                    <a href="https://sites.google.com/view/drive-u-7-home/home" class="link-card" target="_blank">
-                        <div class="link-title">G+</div>
-                        <div class="link-url">sites.google.com/view/drive-u-7-home</div>
-                    </a>
-                </div>
-            </section>
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea"></div>
+        </main>
+    </div>
 
-            <!-- Unknown Sites (NEW SITES FROM DOC ADDED HERE) -->
-            <section class="category unknown">
-                <div class="category-header">
-                    <div class="category-icon" style="background: linear-gradient(135deg, #ff9500, #ff0040);">🔓</div>
-                    <h2>Underground Sites</h2>
-                    <span class="category-subtitle">Lesser known, more likely to work</span>
+    <!-- Movie Modal -->
+    <div class="modal-overlay" id="movieModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="ri-close-line"></i>
+            </button>
+            <div class="modal-header" id="modalHeader">
+                <div class="modal-poster" id="modalPoster">
+                    <img src="" alt="Poster">
                 </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalTitle">Movie Title</h2>
+                <div class="modal-meta" id="modalMeta"></div>
+                <p class="modal-overview" id="modalOverview"></p>
                 
-                <h3 class="subcategory">Quasar</h3>
-                <div class="link-grid">
-                    <a href="https://info.antipodeantarot.com/" class="link-card" target="_blank">
-                        <div class="link-title">Quasar</div>
-                        <div class="link-url">info.antipodeantarot.com</div>
-                    </a>
+                <div class="watch-banner">
+                    <h4><i class="ri-play-circle-line"></i> Watch Options</h4>
+                    <p>Choose your preferred streaming source. Bogge.tv recommended for best quality and reliability.</p>
                 </div>
 
-                <h3 class="subcategory">Void Network V5</h3>
-                <div class="link-grid">
-                    <a href="https://cdn.waterloomath.com/" class="link-card" target="_blank">
-                        <div class="link-title">Void Network V5</div>
-                        <div class="link-url">cdn.waterloomath.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Ghost</h3>
-                <div class="link-grid">
-                    <a href="https://need.helpforukraine.at/" class="link-card" target="_blank">
-                        <div class="link-title">Ghost</div>
-                        <div class="link-url">need.helpforukraine.at</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Fern</h3>
-                <div class="link-grid">
-                    <a href="https://canvasbackpackstore.com/" class="link-card" target="_blank">
-                        <div class="link-title">Fern</div>
-                        <div class="link-url">canvasbackpackstore.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Frogies Arcade V4</h3>
-                <div class="link-grid">
-                    <a href="https://larp.foundation/" class="link-card" target="_blank">
-                        <div class="link-title">Frogies Arcade V4</div>
-                        <div class="link-url">larp.foundation</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Axiom</h3>
-                <div class="link-grid">
-                    <a href="https://ixlschoology.justanothersite.net/" class="link-card" target="_blank">
-                        <div class="link-title">Axiom</div>
-                        <div class="link-url">ixlschoology.justanothersite.net</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Shadow</h3>
-                <div class="link-grid">
-                    <a href="https://keenenglish.hotelconsuladoinn.com/" class="link-card" target="_blank">
-                        <div class="link-title">Shadow #1</div>
-                        <div class="link-url">keenenglish.hotelconsuladoinn.com</div>
-                    </a>
-                    <a href="https://rapidcalc.hotelconsuladoinn.com/" class="link-card" target="_blank">
-                        <div class="link-title">Shadow #2</div>
-                        <div class="link-url">rapidcalc.hotelconsuladoinn.com</div>
-                    </a>
-                    <a href="https://brightcoding.hotelconsuladoinn.com/" class="link-card" target="_blank">
-                        <div class="link-title">Shadow #3</div>
-                        <div class="link-url">brightcoding.hotelconsuladoinn.com</div>
-                    </a>
-                    <a href="https://mandarin.chinapoem.org/" class="link-card" target="_blank">
-                        <div class="link-title">Shadow #4</div>
-                        <div class="link-url">mandarin.chinapoem.org</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Selenite</h3>
-                <div class="link-grid">
-                    <a href="https://tsisveryniche.tomayre.com/" class="link-card" target="_blank">
-                        <div class="link-title">Selenite</div>
-                        <div class="link-url">tsisveryniche.tomayre.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">HypeStudy</h3>
-                <div class="link-grid">
-                    <a href="https://english.jobvn.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #1</div>
-                        <div class="link-url">english.jobvn.com</div>
-                    </a>
-                    <a href="https://info.videnom.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #2</div>
-                        <div class="link-url">info.videnom.com</div>
-                    </a>
-                    <a href="https://id-4.misem.or.id/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #3</div>
-                        <div class="link-url">id-4.misem.or.id</div>
-                    </a>
-                    <a href="https://boeing.robbinsaviation.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #4</div>
-                        <div class="link-url">boeing.robbinsaviation.com</div>
-                    </a>
-                    <a href="https://aperturesciences.apertura.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #5</div>
-                        <div class="link-url">aperturesciences.apertura.com</div>
-                    </a>
-                    <a href="https://education-learning.tovamiasto.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #6</div>
-                        <div class="link-url">education-learning.tovamiasto.com</div>
-                    </a>
-                    <a href="https://windsor.thanatos.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #7</div>
-                        <div class="link-url">windsor.thanatos.com</div>
-                    </a>
-                    <a href="https://id-3.misem.or.id/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #8</div>
-                        <div class="link-url">id-3.misem.or.id</div>
-                    </a>
-                    <a href="https://sciencepark.cc/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #9</div>
-                        <div class="link-url">sciencepark.cc</div>
-                    </a>
-                    <a href="https://homeworkhelp.cc/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #10</div>
-                        <div class="link-url">homeworkhelp.cc</div>
-                    </a>
-                    <a href="https://businessschool.cc/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #11</div>
-                        <div class="link-url">businessschool.cc</div>
-                    </a>
-                    <a href="https://crypto-college.cc/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #12</div>
-                        <div class="link-url">crypto-college.cc</div>
-                    </a>
-                    <a href="https://fulcrumtheatreinc.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #13</div>
-                        <div class="link-url">fulcrumtheatreinc.com</div>
-                    </a>
-                    <a href="https://info.hotelsunrisegrand.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #14</div>
-                        <div class="link-url">info.hotelsunrisegrand.com</div>
-                    </a>
-                    <a href="https://info.shop1stoponline.com/" class="link-card" target="_blank">
-                        <div class="link-title">HypeStudy #15</div>
-                        <div class="link-url">info.shop1stoponline.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Bigfoot's Game Shack</h3>
-                <div class="link-grid">
-                    <a href="https://idyllic-choux-ce6d8a.netlify.app/g/" class="link-card" target="_blank">
-                        <div class="link-title">Bigfoot's Game Shack</div>
-                        <div class="link-url">idyllic-choux-ce6d8a.netlify.app</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Demon</h3>
-                <div class="link-grid">
-                    <a href="https://demon.learn-math.space/" class="link-card" target="_blank">
-                        <div class="link-title">Demon #1</div>
-                        <div class="link-url">demon.learn-math.space</div>
-                    </a>
-                    <a href="https://contentkeeperplzspeed.turbo-education.com/" class="link-card" target="_blank">
-                        <div class="link-title">Demon #2</div>
-                        <div class="link-url">contentkeeperplzspeed.turbo-education.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Vapor V4</h3>
-                <div class="link-grid">
-                    <a href="https://watervapor.space/" class="link-card" target="_blank">
-                        <div class="link-title">Vapor V4 #1</div>
-                        <div class="link-url">watervapor.space</div>
-                    </a>
-                    <a href="https://education-live.com/" class="link-card" target="_blank">
-                        <div class="link-title">Vapor V4 #2</div>
-                        <div class="link-url">education-live.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Dogeub</h3>
-                <div class="link-grid">
-                    <a href="https://deltamath.interdoge.cfd.cdn.cloudflare.net/" class="link-card" target="_blank">
-                        <div class="link-title">Dogeub</div>
-                        <div class="link-url">deltamath.interdoge.cfd...</div>
-                        <div class="link-note">⚠️ Avoid Settings/Apps - triggers block</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Reds Exploit Center</h3>
-                <div class="link-grid">
-                    <a href="https://cheesestorecedarhurst.com/" class="link-card" target="_blank">
-                        <div class="link-title">Reds Exploit Center #1</div>
-                        <div class="link-url">cheesestorecedarhurst.com</div>
-                    </a>
-                    <a href="https://rs.gmsgroup.app/" class="link-card" target="_blank">
-                        <div class="link-title">Reds Exploit Center #2</div>
-                        <div class="link-url">rs.gmsgroup.app</div>
-                    </a>
-                    <a href="https://nowgg.fun/apps/uncube/7074/now.html" class="link-card" target="_blank">
-                        <div class="link-title">Now.gg Mirror</div>
-                        <div class="link-url">nowgg.fun</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Macro Games</h3>
-                <div class="link-grid">
-                    <a href="https://games.macrolorblx.com/" class="link-card" target="_blank">
-                        <div class="link-title">Macro Games</div>
-                        <div class="link-url">games.macrolorblx.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Utopia</h3>
-                <div class="link-grid">
-                    <a href="https://field.school.embeddedonline.org/" class="link-card" target="_blank">
-                        <div class="link-title">Utopia #1</div>
-                        <div class="link-url">field.school.embeddedonline.org</div>
-                    </a>
-                    <a href="https://debate.brain.maniel.one.pl/" class="link-card" target="_blank">
-                        <div class="link-title">Utopia #2</div>
-                        <div class="link-url">debate.brain.maniel.one.pl</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">DayDream</h3>
-                <div class="link-grid">
-                    <a href="https://blog.artweb.website.cdn.cloudflare.net/" class="link-card" target="_blank">
-                        <div class="link-title">DayDream #1</div>
-                        <div class="link-url">blog.artweb.website...</div>
-                    </a>
-                    <a href="https://vermontisfake.org/" class="link-card" target="_blank">
-                        <div class="link-title">DayDream #2</div>
-                        <div class="link-url">vermontisfake.org</div>
-                    </a>
-                    <a href="https://daydreaming.env.pm/" class="link-card" target="_blank">
-                        <div class="link-title">DayDream #3</div>
-                        <div class="link-url">daydreaming.env.pm</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">NautilusOS</h3>
-                <div class="link-grid">
-                    <a href="https://nautilus-os.vercel.app/" class="link-card" target="_blank">
-                        <div class="link-title">NautilusOS</div>
-                        <div class="link-url">nautilus-os.vercel.app</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Max's Games/UnknownProxy</h3>
-                <div class="link-grid">
-                    <a href="https://untitledproxy.pages.dev/" class="link-card" target="_blank">
-                        <div class="link-title">Max's Games</div>
-                        <div class="link-url">untitledproxy.pages.dev</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Classroom 6X</h3>
-                <div class="link-grid">
-                    <a href="https://sites.google.com/view/classroom6x/" class="link-card" target="_blank">
-                        <div class="link-title">Classroom 6X</div>
-                        <div class="link-url">sites.google.com/view/classroom6x</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Kazwire</h3>
-                <div class="link-grid">
-                    <a href="https://history.lodgegomantak.org/" class="link-card" target="_blank">
-                        <div class="link-title">Kazwire #1</div>
-                        <div class="link-url">history.lodgegomantak.org</div>
-                    </a>
-                    <a href="https://art.lexvoip.com/" class="link-card" target="_blank">
-                        <div class="link-title">Kazwire #2</div>
-                        <div class="link-url">art.lexvoip.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Big Mac Heros</h3>
-                <div class="link-grid">
-                    <a href="https://d2edvleactrkkb.cloudfront.net/" class="link-card" target="_blank">
-                        <div class="link-title">Big Mac Heros</div>
-                        <div class="link-url">d2edvleactrkkb.cloudfront.net</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Roblox Unblocker</h3>
-                <div class="link-grid">
-                    <a href="https://hotkitchenbag.com/" class="link-card" target="_blank">
-                        <div class="link-title">Roblox Unblocker #1</div>
-                        <div class="link-url">hotkitchenbag.com</div>
-                    </a>
-                    <a href="https://websitesbridge.com/" class="link-card" target="_blank">
-                        <div class="link-title">Roblox Unblocker #2</div>
-                        <div class="link-url">websitesbridge.com</div>
-                    </a>
-                    <a href="https://nowgg.co/play/roblox-corporation/5349/roblox" class="link-card" target="_blank">
-                        <div class="link-title">Roblox Unblocker #3</div>
-                        <div class="link-url">nowgg.co</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">WebLFG</h3>
-                <div class="link-grid">
-                    <a href="https://weblfg.onrender.com/" class="link-card" target="_blank">
-                        <div class="link-title">WebLFG #1</div>
-                        <div class="link-url">weblfg.onrender.com</div>
-                    </a>
-                    <a href="https://biochemistry.onrender.com/" class="link-card" target="_blank">
-                        <div class="link-title">WebLFG #2</div>
-                        <div class="link-url">biochemistry.onrender.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Noodle Activities</h3>
-                <div class="link-grid">
-                    <a href="https://googleclassroom.netlify.app/activities" class="link-card" target="_blank">
-                        <div class="link-title">Noodle Activities #1</div>
-                        <div class="link-url">googleclassroom.netlify.app</div>
-                    </a>
-                    <a href="https://billnye.netlify.app/activities" class="link-card" target="_blank">
-                        <div class="link-title">Noodle Activities #2</div>
-                        <div class="link-url">billnye.netlify.app</div>
-                    </a>
-                    <a href="https://earnest-tarsier-3c02d1.netlify.app/activities" class="link-card" target="_blank">
-                        <div class="link-title">Noodle Activities #3</div>
-                        <div class="link-url">earnest-tarsier-3c02d1.netlify.app</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Lioxryt</h3>
-                <div class="link-grid">
-                    <a href="https://lioxrytbackup.netlify.app/" class="link-card" target="_blank">
-                        <div class="link-title">Lioxryt</div>
-                        <div class="link-url">lioxrytbackup.netlify.app</div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Archives -->
-            <section class="category">
-                <div class="category-header">
-                    <div class="category-icon" style="background: linear-gradient(135deg, #8338ec, #ff006e);">📁</div>
-                    <h2>Game Archives</h2>
-                </div>
-                <div class="link-grid">
-                    <a href="https://sites.google.com/view/wolfunblock/home?authuser=0" class="link-card" target="_blank">
-                        <div class="link-title">Wolf Unblock</div>
-                        <div class="link-url">sites.google.com/view/wolfunblock</div>
-                    </a>
-                    <a href="https://sites.google.com/view/pizzaedition/home" class="link-card" target="_blank">
-                        <div class="link-title">Pizza Edition Archive</div>
-                        <div class="link-url">sites.google.com/view/pizzaedition</div>
-                    </a>
-                    <a href="https://sites.google.com/view/tripplethepotatoes/home?authuser=0" class="link-card" target="_blank">
-                        <div class="link-title">Tripple The Potatoes</div>
-                        <div class="link-url">sites.google.com/view/tripplethepotatoes</div>
-                    </a>
-                    <a href="https://sites.google.com/view/lotsogames/home" class="link-card" target="_blank">
-                        <div class="link-title">Lots O Games</div>
-                        <div class="link-url">sites.google.com/view/lotsogames</div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Movies (UPDATED WITH ALL MOVIES FROM DOC) -->
-            <section class="category movies">
-                <div class="category-header">
-                    <div class="category-icon" style="background: linear-gradient(135deg, #ff006e, #ffbe0b);">🎬</div>
-                    <h2>Movies Collection</h2>
-                    <span class="category-subtitle">Google Drive Links • Not by me</span>
-                </div>
-                <div class="movie-list">
-                    <a href="https://drive.google.com/file/d/1OyO1OdhtfwR883Uvi0QPP5iooGcxTVSY/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Five Nights at Freddy's</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1OsyF2LKJqjtv0b2Xd9GWOLcYkzny3VZo/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Super Mario Bros. Movie</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/106N7zd611ShtPMOx97XwFSxkg8theQLN/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Cars</span>
-                        <span class="movie-year">2006</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/194M4dGCwh1hTxVM1-_axnLSdt4trnbK2/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Coco</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1y5q4v_Sx6Kj9nIrNjaAbCVcX36nRC3qB/view?ts=6717b8cf" class="movie-link" target="_blank">
-                        <span class="movie-name">Encanto</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/11CN0fT7CwCHgz__mY4FWjcoT5w_wZD9S/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Finding Nemo</span>
-                        <span class="movie-year">2003</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1hpUpKEdeT9ta-8FjSpMUAXw17E-8uwIY/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Frozen II</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1tVsDrCHeADhoZRkQZnXIIj3R5kpB2une/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Incredibles</span>
-                        <span class="movie-year">2004</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1SABVZNMwHTME4hsFwL9IWyWZPKDTBSoT/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Inside Out 2</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1yx66GkjBaCwjcMNoovV8w9yPNlZ7Q4Gu/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Maleficent</span>
-                        <span class="movie-year">2014</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1EsX8k7nfYQrzC6apqJqnyfH7HLAHl31G/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Moana</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1iVJq1FsNG577gesP7CaTWPLgdqAtnaEg/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Moana 2</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1lmlVArBa1cDynHvvDOddrMnCPvYaFVeK/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Monsters, Inc.</span>
-                        <span class="movie-year">2001</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1VcUlwoH5kBsHK6vYEMYMJuhpYgTCng20/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Luca</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/0ByibEzjq_Q9LdHlaVzVTLXB5Slk?resourcekey=0-vt41araB3egbisfGtub81g" class="movie-link" target="_blank">
-                        <span class="movie-name">MULAN SAGA</span>
-                        <span class="movie-year">Collection</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1D4fFFOThEcYDjLQqISw-29Le-xKt27pg/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Pirates Of The Caribbean: Curse Of The Black Pearl</span>
-                        <span class="movie-year">2003</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1HuD4_RlXiHOUYHvi56h0t8D7__dCEH1Y/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Pirates of the Caribbean: At World's End</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Nc5QxL1XnvFJy6aNQ2s1j_TwtwqWRjoY/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Pirates of the Caribbean: On Stranger Tides</span>
-                        <span class="movie-year">2011</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1kjVDdXtZ3-O0SndMHeIwMXe4jNZJ4w2C/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Ratatouille</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1lfgeKem8CjfY7LHA67xfbdIv1SWliNVp/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Simpsons Movie</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1q6DtsWQ-dFjBydahDLvLOtzW4-N8OIZf/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Peter Pan</span>
-                        <span class="movie-year">1953</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1vELzmz9u6vQ18YtMipK9nSWJhZLP6KaH/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Good Dinosaur</span>
-                        <span class="movie-year">2015</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1GM7QyJzFwEKM2fM42SWb7oIRN2UPUzqM/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Little Mermaid</span>
-                        <span class="movie-year">1989</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1sFYkkRX85JK-a2LRl8_QmZPhYkYIn6KG/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Little Mermaid</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1fpkFiPnyvjxCtN6a89i-U2H1cr5_Y_HC/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Lion King</span>
-                        <span class="movie-year">1994</span>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/1cmpDGlJ-vvs5g1wJKKoimdjPg28MPS39" class="movie-link" target="_blank">
-                        <span class="movie-name">Toy Story Trilogy</span>
-                        <span class="movie-year">1995-2010</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1fW6Ov5NIaRh4h78-qBpWeln_Vs9oEXOQ/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Toy Story</span>
-                        <span class="movie-year">1995</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1k3RVDc_Vah1H9lFsXQZJ6mE3KqdDcK_T/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Toy Story 2</span>
-                        <span class="movie-year">1999</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/13msxxmyEco7CRBkO_Ju1SMx5KK4r4Su8/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Toy Story 3</span>
-                        <span class="movie-year">2010</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1bFUbsQ9VEazeCt5l_VBVDtjCsbJmZ_Vr/preview" class="movie-link" target="_blank">
-                        <span class="movie-name">Toy Story 4</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/0B9konOTuvSYRQTl2Nmp6NkpjSG8/view?resourcekey=0-gT34eT_Bn7WLDxwX3U41fw" class="movie-link" target="_blank">
-                        <span class="movie-name">WALL·E</span>
-                        <span class="movie-year">2008</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1HYeIrbf8A-vfvJsvYP59AQzG9l8nt03h/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Zootopia</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1UsxNtlBxGFp955GwEB-s8wYJCA6bXt7e/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Avengers: Endgame</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1AstKQ5KLX94k7RFIlsu2St9um8sS_w_M/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Ant-Man And The Wasp</span>
-                        <span class="movie-year">2018</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1GdMksUpH7ghCBF1j4sEmJU9hmZ3pPpkn/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Black Panther</span>
-                        <span class="movie-year">2018</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1VH_yELQQxJxhuyxsU80q8eMsEeaxNomz/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Deadpool</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1wcE3D19t54BnWtLNl5cruklfPVPh92nY/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Deadpool 2</span>
-                        <span class="movie-year">2018</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1aBzsoTJAjhZeFFDkIV2SN7p7ZHagUEDc/view?t=1" class="movie-link" target="_blank">
-                        <span class="movie-name">Deadpool & Wolverine</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1pFavPs7Mi9rx_BrAjxbeHNWg7ClAB2_K/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Guardians of the Galaxy Vol. 3</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1u1glpdPyZvJ1MAgTrxAnTrS8Wvys3Bdt/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Iron Man 2</span>
-                        <span class="movie-year">2010</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1f7AlYvxrURwU7138fr2CzyTmN0qK43rp/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Iron Man 3</span>
-                        <span class="movie-year">2013</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1xBiVuAnW0hFxIhG3samjzJJ-czMAKxN0/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Shang-Chi and the Legend of the Ten Rings</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/0BzeqnwcztH5cRERqUGl6TFkyc3M/view?usp=drive_link&resourcekey=0--S8rnshNZ6cP5uYrkFu3WA" class="movie-link" target="_blank">
-                        <span class="movie-name">The Wolverine</span>
-                        <span class="movie-year">2013</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/10r1UB_bpBRfG8HykNJ2j63nwUawm-3FS/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Thor: The Dark World</span>
-                        <span class="movie-year">2013</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/13d5gq3Kx3koobcfRTVyH9Hhum3s8Fxag/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Venom: Let There Be Carnage</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1C6aUcmJeLpm8ysdYwnt7HRZFAT6k0oQs/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Venom: The Last Dance</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/0B9-xZ3ngACjnMkRRZTRPUkEtRlE/edit?resourcekey=0-31zl5s_itViyCOYNcqHGSA" class="movie-link" target="_blank">
-                        <span class="movie-name">X-Men Origins: Wolverine</span>
-                        <span class="movie-year">2009</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1XOhalDbPc-27oTHBEoiQCRjsXrktB4aY/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">X-Men: Apocalypse</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/14BaJhmDRr3veoH436CKdPDp9r-j5214I/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man</span>
-                        <span class="movie-year">2002</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1yV7ZmEkfOVOLdV51wN6vSeDf3_tQqBvf/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man 2</span>
-                        <span class="movie-year">2004</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1ExTfRPC3YGmCSg8W2uFSYkUMw7a1vcTR/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man 3</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1jom1D1Dc3eF3ZmCXVzh8lhlXrFGOBpXK/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Amazing Spider-Man</span>
-                        <span class="movie-year">2012</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1bQpgzMav6AHi3UYnAagHPsGyraC0GWK_/view" class="movie-link" target="_blank">
-                        <span class="movie-name">The Amazing Spider-Man 2</span>
-                        <span class="movie-year">2014</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/16nP21GFh_p9LNNW59oX2pMmTznKV43K4/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man: Homecoming</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1YFUpSLmxb6xIlbdJXScIkRYvwYxvJ_18/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man: Far from Home</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1V3Bq0lrDQUxJay5DDs3gK69ZvRNb1j2u/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man: Into The Spider-Verse</span>
-                        <span class="movie-year">2018</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Sd1l_LhKRp_2OE5gRJJyPubnZjJccLgQ/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Spider-Man: Across The Spider-Verse</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/1sxtovwaj9nvEa_KZjxPjK1n03tSjR1yU" class="movie-link" target="_blank">
-                        <span class="movie-name">The Dark Knight Trilogy</span>
-                        <span class="movie-year">2005-2012</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1__wCd7uV9s7qY-o7qZ6F1lO9UQPV7B90/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Joker</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1nDgCNAuFgSI6fDKbRZFkDhzViib1ixYS/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: A New Hope</span>
-                        <span class="movie-year">1977</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1q0Jof59Il_So2z5Q38ANn55qB2GCpOx3/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: The Empire Strikes Back</span>
-                        <span class="movie-year">1980</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1D-T-C4PNPbZ61wiHqXgQlQqYy_NTcsKa/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: The Force Awakens</span>
-                        <span class="movie-year">2015</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1vCdep3QXu8GE9IaNUdVmCGLiG24kFrWb/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: The Last Jedi</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1viDV-Gu6yGHOpyaDefPH3Id9fXSHuTsi/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: The Rise of Skywalker</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/19Pa9tkJFpPZdImgpd8a9wQGaqt2yGlEJ/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Rogue One: A Star Wars Story</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/16dO2t6nMYzRFTKGBVByMPYtru6kwix7H/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Star Wars: The Clone Wars</span>
-                        <span class="movie-year">2008</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1povW59rvEfsLf7xfXE3Q_9m0FITjUbUV/view" class="movie-link" target="_blank">
-                        <span class="movie-name">South Park: Bigger, Longer & Uncut</span>
-                        <span class="movie-year">1999</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1is3m8OOl2UvAmSFaIVKYb3UQ6HMMe4ps/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">South Park: Post Covid</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1w9f4WudGBkXyYTWReinBq7QqaWfHfZTo/view" class="movie-link" target="_blank">
-                        <span class="movie-name">South Park: The Streaming Wars Part 2</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1bJMKhvzwuVfAYECLheyA_h38T9oYvkgX/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Sorcerer's Stone</span>
-                        <span class="movie-year">2001</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1NSY9Ij-PcPhN4ODmmNTSvUhD5osQ_SCo/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Chamber of Secrets</span>
-                        <span class="movie-year">2002</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Zu15ykGtc1xxKIKfAeUV_L1vAbCt--zO/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Prisoner of Azkaban</span>
-                        <span class="movie-year">2004</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1eVK_s8Sp-Gvv1J65ocyLbwyqC7vkuoFK/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Order of the Phoenix</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1QfAnvJtU3oR7IV2CrN2qRx4vFThjbbe1/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Half Blood Prince</span>
-                        <span class="movie-year">2009</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/16jXkeJny6L8MrC_7issz4AtANAzNDJqw/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Harry Potter and the Deathly Hallows - Part 2</span>
-                        <span class="movie-year">2011</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1X9Kflcg0LuRjceV6JghCzs49px8cRTIk/view" class="movie-link" target="_blank">
-                        <span class="movie-name">John Wick</span>
-                        <span class="movie-year">2014</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1gzsZEVTNEb93tSa0nuzlpR2n20D4Dyx9/view" class="movie-link" target="_blank">
-                        <span class="movie-name">John Wick: Chapter 2</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1CsIZrKGXn557DdOJrdz5ty7nkg0i4CWR/view" class="movie-link" target="_blank">
-                        <span class="movie-name">John Wick: Chapter 3</span>
-                        <span class="movie-year">2019</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/10LUlcX6Hu9pn3c3xmPlfJOf20Qjwgxq_/view" class="movie-link" target="_blank">
-                        <span class="movie-name">John Wick: Chapter 4</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1emX4CShNejqhStNK-b0xDVBBMA0t2gcE/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Teenage Mutant Ninja Turtles: Mutant Mayhem</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1gdIpjtTCHV_a8p9KPQaQg1ljIcanpu5S/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Teenage Mutant Ninja Turtles III</span>
-                        <span class="movie-year">1993</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/18iqYAOVbRHOT7jzJ3sqlyxi8RS5AH5sM/view?usp=sharing" class="movie-link" target="_blank">
-                        <span class="movie-name">TMNT</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1nfyJg41IDD_zRmv3i64MUSpPuCPTq7gb/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Teenage Mutant Ninja Turtles</span>
-                        <span class="movie-year">2014</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1fWvuZyyF8dWKn9y60awRgwTxKAQd11cl/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Teenage Mutant Ninja Turtles: Out of the Shadows</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Z9fJZ-jaWWpoEPa2CTIqN07ugZiyIuD4/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers</span>
-                        <span class="movie-year">2007</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/16W1mt5pR2E0_4DXhvHCpBabnTnMbCRTY/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers: Revenge of the Fallen</span>
-                        <span class="movie-year">2009</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1P3AU9onyXEKK03hRH63SKPoHbjPwMOFB/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers: Dark of the Moon</span>
-                        <span class="movie-year">2011</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1TP3PH5br78DxrdNUDoH0J0ciJQJl804q/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers: The Last Knight</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1epYCAJMFrmUBlId2wWFI0lcC1UvbX-Ez/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers: Rise of the Beasts</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1cD5AaH1qXrA3CdlyD6lEJIfspu4FDOD-/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Transformers One</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1bB65cEOgbz2Y0ic6nGDZfUQlECXBk2qt/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Jurassic Park</span>
-                        <span class="movie-year">1993</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/15okru5XkkghrsKUfQJaFUTUHxHF_o9a1/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Lost World: Jurassic Park</span>
-                        <span class="movie-year">1997</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1W9RJS1N_rBcNFAA73Y3B6leLhhjXXY9k/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Jurassic Park III</span>
-                        <span class="movie-year">2001</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1oD0MwA_C9OVb7HeO70m9gAAs-dbm9SJG/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Jurassic World</span>
-                        <span class="movie-year">2015</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1x84uwAQzm7-j9MhDdNF5sb_jCRQFhjIa/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Jurassic World Dominion</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/12UeDOq7tCcbfvEo_EtzkL3Gxho45UOl4/view?resourcekey" class="movie-link" target="_blank">
-                        <span class="movie-name">Twisters</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1kph0MTxbIHWar5DVkqmrZWiy5LuF9--A/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Scream VI</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1yrqaifXgmM1s7U0yjAcUKDhpknUyG1TN/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Wonka</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1HaXeNylNfZXhRudGTNLUWtrN-oAmone4/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Sonic the Hedgehog</span>
-                        <span class="movie-year">2020</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/13YPdlfR1BTzXfqwmfbzfiuPycjQsh0Yb/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Sonic the Hedgehog 2</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1PUAJDEIDgsH_cLUWN2tgPdWAuINXQ9fm/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Minions: The Rise of Gru</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1ZJWkqS6Y5XO6bRrgCH88rgQZR848Lr8V/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Minions</span>
-                        <span class="movie-year">2015</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1KDDDkhqdiwnoXUw9aYc4WdBfprqPX6pE/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Despicable Me</span>
-                        <span class="movie-year">2010</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1bTG8tnEKRvWZnnwNRrHSwOC028Rr_Mrg/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Despicable Me 2</span>
-                        <span class="movie-year">2013</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1W_Wr8yBmz_lTq3c80Vqj1ZySqXHiQ6mF/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Despicable Me 3</span>
-                        <span class="movie-year">2017</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1siki1wYP3LpfjFpUT8Z9lJuJzl7MdBhX/view?t=2" class="movie-link" target="_blank">
-                        <span class="movie-name">Despicable Me 4</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1WnfCHnjlcN7joibU1e0RieYJNFBPgXRn/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Beetlejuice Beetlejuice</span>
-                        <span class="movie-year">2024</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1YPdexiO1cHulGguqGvHKq0Grsnpdlbs1/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Top Gun</span>
-                        <span class="movie-year">1986</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1nmGDHktR96jkaYl2lf-d-XTtNtFh4PTv/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Top Gun: Maverick</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/18sSKADZamG3w8ZaanP93XU4yHSVKzApM/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Goonies</span>
-                        <span class="movie-year">1985</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1_Jjo7rOcCkYt3UryVkV2XvTfrL4QvHTE/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Terrifier 2</span>
-                        <span class="movie-year">2022</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/0B9-xZ3ngACjnMkRRZTRPUkEtRlE/edit?resourcekey=0-31zl5s_itViyCOYNcqHGSA" class="movie-link" target="_blank">
-                        <span class="movie-name">The Exorcist</span>
-                        <span class="movie-year">1973</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1-bYIrWe0duy7IT8p2z0JKIA9sYrSRO8L/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The SpongeBob SquarePants Movie</span>
-                        <span class="movie-year">2004</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1ExVaSRcps4wvIcRczczvBPSGYxUkfvXE/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Mask</span>
-                        <span class="movie-year">1994</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/17VPLw23bmvSYSa7C9fyiB9c3iXB09PNN/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Conjuring</span>
-                        <span class="movie-year">2013</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1GLmG41OhRt9YfRa4r5nwvw8hCIS1Sofv/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Amazing Spider-Man 2</span>
-                        <span class="movie-year">2014</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1_pQ3kbz_a8l3B7SKfdP9dYQwKax0WHUD/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Terrifier</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1zECVNreFAl8LNGcOrlPqtMzw_Su1S3AC/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Conjuring 2</span>
-                        <span class="movie-year">2016</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1Kl4ieKALPoEYbllsRy7V8AYiPtJATg7W/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Lorax</span>
-                        <span class="movie-year">2012</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1k0tAH--aSS2Ik_xCwr9nJSr1XAS0cFH6/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Conjuring: The Devil Made Me Do It</span>
-                        <span class="movie-year">2021</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1emX4CShNejqhStNK-b0xDVBBMA0t2gcE/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">Teenage Mutant Ninja Turtles: Mutant Mayhem</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1CPZj45zQd1Ih-G0I7Ifo8dACj-4jbOJa/view?usp=drive_link" class="movie-link" target="_blank">
-                        <span class="movie-name">The Nun II</span>
-                        <span class="movie-year">2023</span>
-                    </a>
-                    <a href="https://drive.google.com/file/d/1q1PFmdU3DJRopHbRU5Xmg2zJxA3hjfzX/view" class="movie-link" target="_blank">
-                        <span class="movie-name">Regular Show The Movie</span>
-                        <span class="movie-year">2015</span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Music -->
-            <section class="category music">
-                <div class="category-header">
-                    <div class="category-icon" style="background: linear-gradient(135deg, #3a86ff, #8338ec);">🎵</div>
-                    <h2>Music Playlists</h2>
-                    <span class="category-subtitle">Kanye West & Tyler, The Creator Archives • Not my playlists</span>
-                </div>
-                <div class="link-grid">
-                    <a href="https://untitled.stream/library/project/LR94pKICudarIIsoKE43Q" class="link-card" target="_blank">
-                        <div class="link-title">KANYE WEST: YANDHI</div>
-                        <div class="link-url">31 tracks • 1h 50m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/SxhcFIlbTSTtBAKJbUdiQ" class="link-card" target="_blank">
-                        <div class="link-title">DONDA 2: FOR MAMA</div>
-                        <div class="link-url">39 tracks • 2h 3m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/IzifbXVhUjA9uo2rM9XLP" class="link-card" target="_blank">
-                        <div class="link-title">DONDA 2.0</div>
-                        <div class="link-url">25 tracks • 2h 12m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/X3PTFiYaNADrj5Fvcspyz" class="link-card" target="_blank">
-                        <div class="link-title">DONDA 3</div>
-                        <div class="link-url">18 tracks • 1h 3m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/YK4Rl9CwHviaZ8wewr1sw" class="link-card" target="_blank">
-                        <div class="link-title">BULLY</div>
-                        <div class="link-url">16 tracks • 52m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/JdQTAbufCUGRp9hOlXgkK" class="link-card" target="_blank">
-                        <div class="link-title">YEPHORIA</div>
-                        <div class="link-url">17 tracks • 1h 17m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/2prAs3il0Fo2NeIwyv9oK" class="link-card" target="_blank">
-                        <div class="link-title">JESUS IS EVERYTHING</div>
-                        <div class="link-url">24 tracks • 1h 38m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/l3wckbUigGGC4Id1GapgY" class="link-card" target="_blank">
-                        <div class="link-title">TRUE PROPHETS</div>
-                        <div class="link-url">16 tracks • 1h 44m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/90p9s5Y8uneuqVrPGNDAM" class="link-card" target="_blank">
-                        <div class="link-title">SAVE ME GOD</div>
-                        <div class="link-url">15 tracks • 52m 53s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/GfJrB0KLLlr4N7rSxMssc" class="link-card" target="_blank">
-                        <div class="link-title">YEEZUS 2</div>
-                        <div class="link-url">13 tracks • 56m 52s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/sEJCgq1DEtUgGMNDxnbuA" class="link-card" target="_blank">
-                        <div class="link-title">GOOD A JOB*</div>
-                        <div class="link-url">18 tracks • 1h 19m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/kWehVkoYhtJ0aOVtZpDIg" class="link-card" target="_blank">
-                        <div class="link-title">SO HELP ME GOD</div>
-                        <div class="link-url">10 tracks • 35m 39s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/3kE7C4VCdSR2tfDQMMv18" class="link-card" target="_blank">
-                        <div class="link-title">WATCH THE FLAMES</div>
-                        <div class="link-url">12 tracks • 51m 5s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/2j7QPD656SnIGZ3SfchF3" class="link-card" target="_blank">
-                        <div class="link-title">WATCH THE THRONE 2</div>
-                        <div class="link-url">11 tracks • 34m 25s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/s18s1Nj0udxUvCQskxjnc" class="link-card" target="_blank">
-                        <div class="link-title">ALL HALLOWS EVE DELUXE</div>
-                        <div class="link-url">21 tracks • 1h 28m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/9kCmFKb3iWKF99cFMl2uz" class="link-card" target="_blank">
-                        <div class="link-title">ALL HALLOWS EVE</div>
-                        <div class="link-url">16 tracks • 1h 8m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/VoxXW8iioQkfrpbqN5K0A" class="link-card" target="_blank">
-                        <div class="link-title">MBDTF DELUXE</div>
-                        <div class="link-url">25 tracks • 1h 45m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/eCMQtVt5dKihqutHt85gQ" class="link-card" target="_blank">
-                        <div class="link-title">YE</div>
-                        <div class="link-url">14 tracks • 44m 29s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/jZSHZHORLjhuSnZy3G0JA" class="link-card" target="_blank">
-                        <div class="link-title">CARTI YE</div>
-                        <div class="link-url">14 tracks • 34m 38s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/t6eCBccrSbv7sdANzGMZ9" class="link-card" target="_blank">
-                        <div class="link-title">YEBU</div>
-                        <div class="link-url">14 tracks • 33m 47s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/gjLjksokuAyVRyZmXY4og" class="link-card" target="_blank">
-                        <div class="link-title">WAR</div>
-                        <div class="link-url">10 tracks • 26m 53s</div>
-                    </a>
-                    <a href="https://mega.nz/folder/Y4A1mKRA#2BshAph7jOKavSew7rkaBQ" class="link-card" target="_blank">
-                        <div class="link-title">KANYE MEGATHREAD</div>
-                        <div class="link-url">Full Archive • Mega.nz</div>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/1cdRnxfgnap4nQ4yq4Cw4pAiOXmOr9p0u" class="link-card" target="_blank">
-                        <div class="link-title">TYLER: IGOR ALT VERSIONS</div>
-                        <div class="link-url">12 tracks • 57m 5s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/5V8BYQxpjoYR0HAMJIzmR" class="link-card" target="_blank">
-                        <div class="link-title">(OG) IGOR</div>
-                        <div class="link-url">14 tracks • 1h 14m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/LnwXPmM0NUPvCKwPMUjsk" class="link-card" target="_blank">
-                        <div class="link-title">CMIYGL (OG)</div>
-                        <div class="link-url">11 tracks • 1h 9m</div>
-                    </a>
-                    <a href="https://untitled.stream/library/project/3KyKD3jANwaznTqImTVwn" class="link-card" target="_blank">
-                        <div class="link-title">FLOWER BOY: THE OUTTAKES</div>
-                        <div class="link-url">12 tracks • 28m 34s</div>
-                    </a>
-                    <a href="https://untitled.stream/library/folder/sbybJSTQjv19a6CUheNAO" class="link-card" target="_blank">
-                        <div class="link-title">TYLER FOLDER</div>
-                        <div class="link-url">28 albums • Full Collection</div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- AI Cheating 101 -->
-            <section class="category ai">
-                <div class="category-header">
-                    <div class="category-icon" style="background: linear-gradient(135deg, #ffbe0b, #ff006e);">🤖</div>
-                    <h2>AI Cheating 101</h2>
-                    <span class="category-subtitle">Use Responsibly</span>
-                </div>
-                
-                <h3 class="subcategory">AI Assistants</h3>
-                <div class="link-grid">
-                    <a href="https://www.kimi.com/" class="link-card" target="_blank">
-                        <div class="link-title">Kimi AI</div>
-                        <div class="link-url">kimi.com</div>
-                    </a>
-                    <a href="https://chatgpt.com/" class="link-card" target="_blank">
-                        <div class="link-title">ChatGPT</div>
-                        <div class="link-url">chatgpt.com</div>
-                    </a>
-                    <a href="https://www.perplexity.ai/" class="link-card" target="_blank">
-                        <div class="link-title">Perplexity AI</div>
-                        <div class="link-url">perplexity.ai</div>
-                    </a>
-                    <a href="https://claude.ai/login" class="link-card" target="_blank">
-                        <div class="link-title">Claude</div>
-                        <div class="link-url">claude.ai</div>
-                    </a>
-                    <a href="https://gemini.google.com/" class="link-card" target="_blank">
-                        <div class="link-title">Google Gemini</div>
-                        <div class="link-url">gemini.google.com</div>
-                    </a>
-                    <a href="https://poe.com/login?redirect_url=%2F" class="link-card" target="_blank">
-                        <div class="link-title">Poe</div>
-                        <div class="link-url">poe.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Math Solvers</h3>
-                <div class="link-grid">
-                    <a href="https://photomath.com/" class="link-card" target="_blank">
-                        <div class="link-title">Photomath</div>
-                        <div class="link-url">photomath.com</div>
-                    </a>
-                    <a href="https://www.mathway.com/Algebra" class="link-card" target="_blank">
-                        <div class="link-title">Mathway</div>
-                        <div class="link-url">mathway.com</div>
-                    </a>
-                    <a href="https://www.symbolab.com/" class="link-card" target="_blank">
-                        <div class="link-title">Symbolab</div>
-                        <div class="link-url">symbolab.com</div>
-                    </a>
-                    <a href="https://www.wolframalpha.com/" class="link-card" target="_blank">
-                        <div class="link-title">WolframAlpha</div>
-                        <div class="link-url">wolframalpha.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">Homework Help</h3>
-                <div class="link-grid">
-                    <a href="https://www.chegg.com/" class="link-card" target="_blank">
-                        <div class="link-title">Chegg</div>
-                        <div class="link-url">chegg.com</div>
-                    </a>
-                    <a href="https://www.coursehero.com/" class="link-card" target="_blank">
-                        <div class="link-title">Course Hero</div>
-                        <div class="link-url">coursehero.com</div>
-                    </a>
-                    <a href="https://brainly.com/" class="link-card" target="_blank">
-                        <div class="link-title">Brainly</div>
-                        <div class="link-url">brainly.com</div>
-                    </a>
-                </div>
-
-                <h3 class="subcategory">AI Humanizers</h3>
-                <div class="link-grid">
-                    <a href="https://rewritify.ai/" class="link-card" target="_blank">
-                        <div class="link-title">Rewritify</div>
-                        <div class="link-url">rewritify.ai</div>
-                    </a>
-                    <a href="http://humanize.ai" class="link-card" target="_blank">
-                        <div class="link-title">Humanize.ai</div>
-                        <div class="link-url">humanize.ai</div>
-                    </a>
-                    <a href="http://humanizeai.com" class="link-card" target="_blank">
-                        <div class="link-title">HumanizeAI.com</div>
-                        <div class="link-url">humanizeai.com</div>
-                    </a>
-                    <a href="https://www.humanizeai.pro/" class="link-card" target="_blank">
-                        <div class="link-title">HumanizeAI Pro</div>
-                        <div class="link-url">humanizeai.pro</div>
-                    </a>
-                    <a href="https://aihumanize.io/" class="link-card" target="_blank">
-                        <div class="link-title">AI Humanize</div>
-                        <div class="link-url">aihumanize.io</div>
-                    </a>
-                    <a href="https://www.grammarly.com/ai-humanizer" class="link-card" target="_blank">
-                        <div class="link-title">Grammarly AI Humanizer</div>
-                        <div class="link-url">grammarly.com/ai-humanizer</div>
-                    </a>
-                    <a href="https://www.humanizeai.io/" class="link-card" target="_blank">
-                        <div class="link-title">HumanizeAI.io</div>
-                        <div class="link-url">humanizeai.io</div>
-                    </a>
-                    <a href="https://gpthuman.ai/" class="link-card" target="_blank">
-                        <div class="link-title">GPT Human</div>
-                        <div class="link-url">gpthuman.ai</div>
-                    </a>
-                    <a href="https://unaimytext.com/" class="link-card" target="_blank">
-                        <div class="link-title">UnAI My Text</div>
-                        <div class="link-url">unaimytext.com</div>
-                    </a>
-                    <a href="https://stealthwriter.ai/" class="link-card" target="_blank">
-                        <div class="link-title">Stealth Writer</div>
-                        <div class="link-url">stealthwriter.ai</div>
-                    </a>
-                    <a href="https://www.undetectableai.pro/" class="link-card" target="_blank">
-                        <div class="link-title">Undetectable AI Pro</div>
-                        <div class="link-url">undetectableai.pro</div>
-                    </a>
-                    <a href="https://undetectable.ai/ai-humanizer" class="link-card" target="_blank">
-                        <div class="link-title">Undetectable.ai</div>
-                        <div class="link-url">undetectable.ai</div>
-                    </a>
-                    <a href="https://mydetector.ai/ai-humanizer/" class="link-card" target="_blank">
-                        <div class="link-title">MyDetector AI Humanizer</div>
-                        <div class="link-url">mydetector.ai</div>
-                    </a>
-                    <a href="https://walterwrites.ai/" class="link-card" target="_blank">
-                        <div class="link-title">Walter Writes</div>
-                        <div class="link-url">walterwrites.ai</div>
-                    </a>
-                </div>
-            </section>
+                <div class="player-options" id="playerOptions"></div>
+            </div>
         </div>
-
-        <footer class="footer">
-            <div class="footer-text">MORE SOON</div>
-            <p style="margin-top: 1rem; color: #444;">Stay tuned for updates • ByteMePlz V4.0</p>
-        </footer>
     </div>
 
     <script>
-        // Create floating particles
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 10 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        
+        const CONFIG = {
+            TMDB_API_KEY: '149e0d8c7075146a68337f6c898f9b8b',
+            TMDB_BASE_URL: 'https://api.themoviedb.org/3',
+            TMDB_IMAGE_URL: 'https://image.tmdb.org/t/p',
+            
+            embedSources: [
+                { 
+                    name: 'Bogge.tv', 
+                    type: 'search', 
+                    url: 'https://bogge.tv/search/', 
+                    icon: 'ri-global-line',
+                    class: 'bogge',
+                    description: 'Search & Click to Watch'
+                },
+                { 
+                    name: 'VidSrc.me', 
+                    type: 'direct', 
+                    url: 'https://vidsrc.me/embed/movie?tmdb=', 
+                    icon: 'ri-film-line',
+                    description: 'Direct Stream'
+                },
+                { 
+                    name: 'VidSrc.to', 
+                    type: 'direct', 
+                    url: 'https://vidsrc.to/embed/movie/', 
+                    icon: 'ri-film-line',
+                    description: 'Direct Stream'
+                },
+                { 
+                    name: 'MoviesAPI', 
+                    type: 'direct', 
+                    url: 'https://moviesapi.club/movie/', 
+                    icon: 'ri-movie-line',
+                    description: 'Direct Stream'
+                }
+            ],
 
-        // Add hover sound effect (optional - subtle)
-        document.querySelectorAll('.link-card, .movie-link').forEach(link => {
-            link.addEventListener('mouseenter', function() {
-                this.style.transform = this.classList.contains('movie-link') ? 'translateX(10px)' : 'translateY(-5px)';
-            });
+            sections: [
+                { id: 'home', name: 'Home', icon: 'ri-home-4-line' },
+                { id: 'movies', name: 'Movies', icon: 'ri-movie-2-line' },
+                { id: 'sites', name: 'Sites', icon: 'ri-links-line' }
+            ]
+        };
+
+        let currentMovies = [];
+        let currentSection = 'home';
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initNav();
+            initParticles();
+            
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('appContainer').classList.add('loaded');
+                }, 500);
+            }, 1500);
+            
+            showSection('home');
         });
 
-        // Smooth scroll behavior
-        document.documentElement.style.scrollBehavior = 'smooth';
+        function initNav() {
+            const navList = document.getElementById('navList');
+            CONFIG.sections.forEach(section => {
+                const li = document.createElement('li');
+                li.className = 'nav-item';
+                li.dataset.section = section.id;
+                li.onclick = () => showSection(section.id);
+                li.innerHTML = `
+                    <i class="${section.icon}"></i>
+                    <span class="nav-tooltip">${section.name}</span>
+                `;
+                navList.appendChild(li);
+            });
+        }
+
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // ============================================
+        // SECTIONS
+        // ============================================
+
+        function showSection(sectionId) {
+            currentSection = sectionId;
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === sectionId);
+            });
+
+            const container = document.getElementById('contentArea');
+            
+            switch(sectionId) {
+                case 'home':
+                    renderHome(container);
+                    break;
+                case 'movies':
+                    renderMovies(container);
+                    break;
+                case 'sites':
+                    renderSites(container);
+                    break;
+            }
+        }
+
+        function renderHome(container) {
+            container.innerHTML = `
+                <div class="section-header">
+                    <div class="version-badge">V5.0 BOGGE.TV EDITION</div>
+                    <h2><i class="ri-home-4-line"></i> Welcome to ByteMePlz</h2>
+                    <p style="color: var(--text-muted); font-size: 1.1rem;">Your ultimate entertainment portal with Bogge.tv integration.</p>
+                </div>
+
+                <div class="updates">
+                    <h3><i class="ri-flashlight-line"></i> Latest Updates</h3>
+                    <div class="update-item">V5: Added Bogge.tv search integration with direct movie access</div>
+                    <div class="update-item">V5: New cyan/purple cyberpunk theme - no more green!</div>
+                    <div class="update-item">V5: Enhanced UI with smooth animations and glow effects</div>
+                    <div class="update-item">V5: All known and unknown sites organized with improved navigation</div>
+                    <div class="update-item feature">Bogge.tv format: https://bogge.tv/watch-movie/watch-[title]-free-[id]</div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="ri-rocket-line" style="color: white;"></i></div>
+                        <h3>Quick Access</h3>
+                    </div>
+                    <div class="link-grid">
+                        <div class="link-card" onclick="showSection('movies')" style="cursor: pointer;">
+                            <div class="link-title"><i class="ri-movie-2-line"></i> Movies</div>
+                            <div class="link-url">Bogge.tv + backup sources</div>
+                            <div class="link-note">Stream the latest releases</div>
+                        </div>
+                        <div class="link-card" onclick="showSection('sites')" style="cursor: pointer;">
+                            <div class="link-title"><i class="ri-gamepad-line"></i> Game Sites</div>
+                            <div class="link-url">All known and unknown sites</div>
+                            <div class="link-note">Curated collection of working proxies</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: var(--gradient-2);"><i class="ri-sparkling-line" style="color: white;"></i></div>
+                        <h3>Features</h3>
+                    </div>
+                    <div class="link-grid">
+                        <div class="link-card">
+                            <div class="link-title"><i class="ri-search-line" style="color: var(--accent-purple);"></i> Smart Search</div>
+                            <div class="link-url">Type in top bar and press Enter</div>
+                            <div class="link-note">Searches Bogge.tv directly</div>
+                        </div>
+                        <div class="link-card">
+                            <div class="link-title"><i class="ri-magic-line" style="color: var(--accent-pink);"></i> Modern Design</div>
+                            <div class="link-url">Glassmorphism + neon accents</div>
+                            <div class="link-note">Cyan, purple, and pink theme</div>
+                        </div>
+                        <div class="link-card">
+                            <div class="link-title"><i class="ri-shield-star-line" style="color: var(--accent-yellow);"></i> Multiple Sources</div>
+                            <div class="link-url">4 streaming options per movie</div>
+                            <div class="link-note">Never get stuck without a working link</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // MOVIES SECTION
+        // ============================================
+
+        async function renderMovies(container) {
+            container.innerHTML = `
+                <div class="section-header">
+                    <h2><i class="ri-movie-2-line"></i> Popular Movies</h2>
+                    <p style="color: var(--text-muted);">Click any movie for Bogge.tv search + backup streaming options.</p>
+                </div>
+                <div class="cards-grid" id="moviesGrid">
+                    <div style="grid-column: 1/-1; text-align: center; padding: 80px; color: var(--text-muted);">
+                        <i class="ri-loader-4-line" style="font-size: 48px; animation: spin 1s linear infinite; display: block; margin-bottom: 16px;"></i>
+                        <p>Loading popular movies from TMDB...</p>
+                    </div>
+                </div>
+            `;
+            
+            await loadMovies();
+        }
+
+        async function loadMovies() {
+            try {
+                const response = await fetch(
+                    `${CONFIG.TMDB_BASE_URL}/movie/popular?api_key=${CONFIG.TMDB_API_KEY}&page=1`
+                );
+                const data = await response.json();
+                
+                currentMovies = data.results.map(movie => ({
+                    id: movie.id,
+                    title: movie.title,
+                    year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
+                    rating: movie.vote_average.toFixed(1),
+                    image: movie.poster_path ? `${CONFIG.TMDB_IMAGE_URL}/w500${movie.poster_path}` : null,
+                    backdrop: movie.backdrop_path ? `${CONFIG.TMDB_IMAGE_URL}/original${movie.backdrop_path}` : null,
+                    overview: movie.overview
+                }));
+                
+                displayMovies();
+                updateStatus('active', `${currentMovies.length} movies loaded`);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('moviesGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 80px; color: var(--text-muted);">
+                        <i class="ri-error-warning-line" style="font-size: 56px; color: var(--accent-red); display: block; margin-bottom: 16px;"></i>
+                        <p style="font-size: 1.1rem; margin-bottom: 8px;">Failed to load movies</p>
+                        <p style="font-size: 0.9rem;">Check your connection and try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayMovies() {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = currentMovies.map(movie => `
+                <div class="content-card" onclick="openMovieModal(${movie.id})">
+                    <img src="${movie.image || 'https://via.placeholder.com/250x400/12121a/00d4ff?text=' + encodeURIComponent(movie.title)}" 
+                         class="card-image" alt="${movie.title}"
+                         onerror="this.src='https://via.placeholder.com/250x400/12121a/00d4ff?text=${encodeURIComponent(movie.title)}'">
+                    <div class="card-badges">
+                        <div class="card-badge rating">★ ${movie.rating}</div>
+                        <div class="card-badge bogge">Bogge.tv</div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${movie.title}</div>
+                        <div class="card-meta">
+                            <span><i class="ri-calendar-line"></i> ${movie.year}</span>
+                            <span><i class="ri-play-circle-line"></i> Watch</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openMovieModal(movieId) {
+            const modal = document.getElementById('movieModal');
+            const movie = currentMovies.find(m => m.id === movieId);
+            if (!movie) return;
+            
+            modal.classList.add('active');
+            document.getElementById('modalTitle').textContent = movie.title;
+            document.getElementById('modalOverview').textContent = movie.overview || 'No description available.';
+            document.getElementById('modalHeader').style.backgroundImage = movie.backdrop ? `url(${movie.backdrop})` : 'none';
+            document.getElementById('modalPoster').querySelector('img').src = movie.image || '';
+            document.getElementById('modalMeta').innerHTML = `
+                <span><i class="ri-calendar-line"></i> ${movie.year}</span>
+                <span><i class="ri-star-fill" style="color: var(--accent-yellow);"></i> ${movie.rating}/10</span>
+                <span><i class="ri-film-line"></i> TMDB ID: ${movie.id}</span>
+            `;
+            
+            const optionsHtml = CONFIG.embedSources.map(source => {
+                let url;
+                if (source.type === 'search') {
+                    const searchQuery = encodeURIComponent(movie.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-'));
+                    url = source.url + searchQuery;
+                } else {
+                    url = source.url + movie.id;
+                }
+                
+                return `
+                    <div class="player-btn ${source.class || ''}" onclick="openPlayer('${url}', '${source.name}')">
+                        <i class="${source.icon}"></i>
+                        <span class="player-btn-title">${source.name}</span>
+                        <span class="player-btn-subtitle">${source.description}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('playerOptions').innerHTML = optionsHtml;
+        }
+
+        function openPlayer(url, name) {
+            const width = 1280;
+            const height = 720;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+            
+            const features = `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes,status=no`;
+            window.open(url, `player_${name}`, features);
+        }
+
+        function closeModal() {
+            document.getElementById('movieModal').classList.remove('active');
+        }
+
+        // ============================================
+        // SITES SECTION
+        // ============================================
+
+        function renderSites(container) {
+            container.innerHTML = `
+                <div class="section-header">
+                    <h2><i class="ri-links-line"></i> All Game Sites</h2>
+                    <p style="color: var(--text-muted);">Complete collection of known and unknown sites. Underground = more likely to work.</p>
+                </div>
+
+                <!-- Known Sites -->
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="ri-gamepad-line" style="color: white;"></i></div>
+                        <h3>Popular Gaming Sites</h3>
+                    </div>
+                    <div class="link-grid">
+                        ${createLink('Now.gg', 'https://now.gg/', 'Cloud gaming platform')}
+                        ${createLink('Poki', 'https://poki.com/', 'Browser games collection')}
+                        ${createLink('The Pizza Edition', 'https://thepizzaedition-games.github.io/', 'Curated game collection')}
+                        ${createLink('Crazy Games', 'https://www.crazygames.com/', 'Action & racing games')}
+                        ${createLink('G+ Portal', 'https://sites.google.com/view/drive-u-7-home/home', 'Google Sites proxy')}
+                    </div>
+                </div>
+
+                <!-- Underground Sites -->
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));"><i class="ri-spy-line" style="color: white;"></i></div>
+                        <h3>Underground Sites</h3>
+                        <span class="category-subtitle">Lesser known = more likely to work</span>
+                    </div>
+
+                    ${createSubcategory('Quasar')}
+                    <div class="link-grid">
+                        ${createLink('Quasar', 'https://info.antipodeantarot.com/', 'Stealth gaming portal')}
+                    </div>
+
+                    ${createSubcategory('Void Network')}
+                    <div class="link-grid">
+                        ${createLink('Void Network V5', 'https://cdn.waterloomath.com/', 'Math-themed proxy')}
+                    </div>
+
+                    ${createSubcategory('Ghost')}
+                    <div class="link-grid">
+                        ${createLink('Ghost', 'https://need.helpforukraine.at/', 'Help-themed disguise')}
+                    </div>
+
+                    ${createSubcategory('Fern')}
+                    <div class="link-grid">
+                        ${createLink('Fern', 'https://canvasbackpackstore.com/', 'Store-front proxy')}
+                    </div>
+
+                    ${createSubcategory('Frogies Arcade')}
+                    <div class="link-grid">
+                        ${createLink('Frogies Arcade V4', 'https://larp.foundation/', 'LARP-themed games')}
+                    </div>
+
+                    ${createSubcategory('Axiom')}
+                    <div class="link-grid">
+                        ${createLink('Axiom', 'https://ixlschoology.justanothersite.net/', 'School-themed portal')}
+                    </div>
+
+                    ${createSubcategory('Shadow Network')}
+                    <div class="link-grid">
+                        ${createLink('Shadow #1', 'https://keenenglish.hotelconsuladoinn.com/', 'Hotel disguise')}
+                        ${createLink('Shadow #2', 'https://rapidcalc.hotelconsuladoinn.com/', 'Calculator theme')}
+                        ${createLink('Shadow #3', 'https://brightcoding.hotelconsuladoinn.com/', 'Coding theme')}
+                        ${createLink('Shadow #4', 'https://mandarin.chinapoem.org/', 'Poetry disguise')}
+                    </div>
+
+                    ${createSubcategory('Selenite')}
+                    <div class="link-grid">
+                        ${createLink('Selenite', 'https://tsisveryniche.tomayre.com/', 'Niche community portal')}
+                    </div>
+
+                    ${createSubcategory('HypeStudy (15 links)')}
+                    <div class="link-grid">
+                        ${createLink('HypeStudy #1', 'https://english.jobvn.com/', 'Job portal disguise')}
+                        ${createLink('HypeStudy #2', 'https://info.videnom.com/', 'Info site theme')}
+                        ${createLink('HypeStudy #3', 'https://id-4.misem.or.id/', 'Indonesian edu theme')}
+                        ${createLink('HypeStudy #4', 'https://boeing.robbinsaviation.com/', 'Aviation disguise')}
+                        ${createLink('HypeStudy #5', 'https://aperturesciences.apertura.com/', 'Portal reference')}
+                        ${createLink('HypeStudy #6', 'https://education-learning.tovamiasto.com/', 'Learning platform')}
+                        ${createLink('HypeStudy #7', 'https://windsor.thanatos.com/', 'Mythology theme')}
+                        ${createLink('HypeStudy #8', 'https://id-3.misem.or.id/', 'Alternative ID')}
+                        ${createLink('HypeStudy #9', 'https://sciencepark.cc/', 'Science theme')}
+                        ${createLink('HypeStudy #10', 'https://homeworkhelp.cc/', 'Tutoring disguise')}
+                        ${createLink('HypeStudy #11', 'https://businessschool.cc/', 'MBA theme')}
+                        ${createLink('HypeStudy #12', 'https://crypto-college.cc/', 'Crypto education')}
+                        ${createLink('HypeStudy #13', 'https://fulcrumtheatreinc.com/', 'Theatre disguise')}
+                        ${createLink('HypeStudy #14', 'https://info.hotelsunrisegrand.com/', 'Hotel chain')}
+                        ${createLink('HypeStudy #15', 'https://info.shop1stoponline.com/', 'E-commerce theme')}
+                    </div>
+
+                    ${createSubcategory('Bigfoot\'s Game Shack')}
+                    <div class="link-grid">
+                        ${createLink('Bigfoot\'s', 'https://idyllic-choux-ce6d8a.netlify.app/g/', 'Netlify hosted')}
+                    </div>
+
+                    ${createSubcategory('Demon')}
+                    <div class="link-grid">
+                        ${createLink('Demon #1', 'https://demon.learn-math.space/', 'Math learning disguise')}
+                        ${createLink('Demon #2', 'https://contentkeeperplzspeed.turbo-education.com/', 'Speed test theme')}
+                    </div>
+
+                    ${createSubcategory('Vapor V4')}
+                    <div class="link-grid">
+                        ${createLink('Vapor V4 #1', 'https://watervapor.space/', 'Atmospheric theme')}
+                        ${createLink('Vapor V4 #2', 'https://education-live.com/', 'Live learning')}
+                    </div>
+
+                    ${createSubcategory('Dogeub')}
+                    <div class="link-grid">
+                        ${createLink('Dogeub', 'https://deltamath.interdoge.cfd.cdn.cloudflare.net/', '⚠️ Avoid Settings/Apps section')}
+                    </div>
+
+                    ${createSubcategory('Reds Exploit Center')}
+                    <div class="link-grid">
+                        ${createLink('Reds #1', 'https://cheesestorecedarhurst.com/', 'Cheese store disguise')}
+                        ${createLink('Reds #2', 'https://rs.gmsgroup.app/', 'Group app theme')}
+                        ${createLink('Now.gg Mirror', 'https://nowgg.fun/apps/uncube/7074/now.html', 'Alternative now.gg')}
+                    </div>
+
+                    ${createSubcategory('Macro Games')}
+                    <div class="link-grid">
+                        ${createLink('Macro Games', 'https://games.macrolorblx.com/', 'Roblox-themed')}
+                    </div>
+
+                    ${createSubcategory('Utopia')}
+                    <div class="link-grid">
+                        ${createLink('Utopia #1', 'https://field.school.embeddedonline.org/', 'Field school theme')}
+                        ${createLink('Utopia #2', 'https://debate.brain.maniel.one.pl/', 'Debate platform')}
+                    </div>
+
+                    ${createSubcategory('DayDream')}
+                    <div class="link-grid">
+                        ${createLink('DayDream #1', 'https://blog.artweb.website.cdn.cloudflare.net/', 'Art blog theme')}
+                        ${createLink('DayDream #2', 'https://vermontisfake.org/', 'Conspiracy theme')}
+                        ${createLink('DayDream #3', 'https://daydreaming.env.pm/', 'Environment theme')}
+                    </div>
+
+                    ${createSubcategory('NautilusOS')}
+                    <div class="link-grid">
+                        ${createLink('NautilusOS', 'https://nautilus-os.vercel.app/', 'OS simulation')}
+                    </div>
+
+                    ${createSubcategory('Max\'s Games')}
+                    <div class="link-grid">
+                        ${createLink('Max\'s Games', 'https://untitledproxy.pages.dev/', 'Pages.dev hosted')}
+                    </div>
+
+                    ${createSubcategory('Classroom 6X')}
+                    <div class="link-grid">
+                        ${createLink('Classroom 6X', 'https://sites.google.com/view/classroom6x/', 'Google Sites')}
+                    </div>
+
+                    ${createSubcategory('Kazwire')}
+                    <div class="link-grid">
+                        ${createLink('Kazwire #1', 'https://history.lodgegomantak.org/', 'History site')}
+                        ${createLink('Kazwire #2', 'https://art.lexvoip.com/', 'Art portfolio')}
+                    </div>
+
+                    ${createSubcategory('Big Mac Heros')}
+                    <div class="link-grid">
+                        ${createLink('Big Mac Heros', 'https://d2edvleactrkkb.cloudfront.net/', 'CDN hosted')}
+                    </div>
+
+                    ${createSubcategory('Roblox Unblocker')}
+                    <div class="link-grid">
+                        ${createLink('Roblox #1', 'https://hotkitchenbag.com/', 'Kitchen theme')}
+                        ${createLink('Roblox #2', 'https://websitesbridge.com/', 'Bridge theme')}
+                        ${createLink('Roblox #3', 'https://nowgg.co/play/roblox-corporation/5349/roblox', 'Direct Roblox')}
+                    </div>
+
+                    ${createSubcategory('WebLFG')}
+                    <div class="link-grid">
+                        ${createLink('WebLFG #1', 'https://weblfg.onrender.com/', 'Render hosted')}
+                        ${createLink('WebLFG #2', 'https://biochemistry.onrender.com/', 'Science theme')}
+                    </div>
+
+                    ${createSubcategory('Noodle Activities')}
+                    <div class="link-grid">
+                        ${createLink('Noodle #1', 'https://googleclassroom.netlify.app/activities', 'Classroom theme')}
+                        ${createLink('Noodle #2', 'https://billnye.netlify.app/activities', 'Science guy theme')}
+                        ${createLink('Noodle #3', 'https://earnest-tarsier-3c02d1.netlify.app/activities', 'Animal theme')}
+                    </div>
+
+                    ${createSubcategory('Lioxryt')}
+                    <div class="link-grid">
+                        ${createLink('Lioxryt', 'https://lioxrytbackup.netlify.app/', 'Backup mirror')}
+                    </div>
+                </div>
+
+                <!-- Archives -->
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));"><i class="ri-archive-line" style="color: white;"></i></div>
+                        <h3>Game Archives</h3>
+                    </div>
+                    <div class="link-grid">
+                        ${createLink('Wolf Unblock', 'https://sites.google.com/view/wolfunblock/home', 'Comprehensive collection')}
+                        ${createLink('Pizza Edition Archive', 'https://sites.google.com/view/pizzaedition/home', 'Original archive')}
+                        ${createLink('Triple The Potatoes', 'https://sites.google.com/view/tripplethepotatoes/home', 'Potato theme')}
+                        ${createLink('Lots O Games', 'https://sites.google.com/view/lotsogames/home', 'Quantity focused')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createLink(title, url, description, note = '') {
+            return `
+                <a href="${url}" class="link-card" target="_blank">
+                    <div class="link-title">${title}</div>
+                    <div class="link-url">${description}</div>
+                    ${note ? `<div class="link-note"><i class="ri-error-warning-line"></i> ${note}</div>` : ''}
+                </a>
+            `;
+        }
+
+        function createSubcategory(name) {
+            return `<div class="subcategory"><i class="ri-folder-3-line"></i> ${name}</div>`;
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+
+        function updateStatus(type, message) {
+            const status = document.getElementById('apiStatus');
+            status.innerHTML = `<i class="ri-${type === 'active' ? 'wifi' : 'loader-4-line'}"></i><span>${message}</span>`;
+        }
+
+        function refreshData() {
+            if (currentSection === 'movies') {
+                showSection('movies');
+            }
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    if (currentSection === 'movies') {
+                        const searchUrl = 'https://bogge.tv/search/' + encodeURIComponent(query.toLowerCase().replace(/\s+/g, '-'));
+                        window.open(searchUrl, '_blank');
+                    } else {
+                        showSection('movies');
+                        setTimeout(() => {
+                            const searchUrl = 'https://bogge.tv/search/' + encodeURIComponent(query.toLowerCase().replace(/\s+/g, '-'));
+                            window.open(searchUrl, '_blank');
+                        }, 100);
+                    }
+                }
+            }
+        }
+
+        // Event listeners
+        document.getElementById('movieModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
     </script>
 </body>
 </html>
