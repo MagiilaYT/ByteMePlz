@@ -970,6 +970,47 @@
             margin-bottom: 16px;
         }
 
+        /* Search Results Styles */
+        .search-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .search-info span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .clear-search-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .clear-search-btn:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: white;
+        }
+
         /* Particles */
         .particles {
             position: fixed;
@@ -1084,7 +1125,7 @@
             <div class="top-bar">
                 <div class="search-box">
                     <i class="ri-search-line"></i>
-                    <input type="text" id="searchInput" placeholder="Search movies, games...">
+                    <input type="text" id="searchInput" placeholder="Search movies...">
                 </div>
                 <div class="top-actions">
                     <div class="api-status" id="apiStatus">
@@ -1204,6 +1245,8 @@
         let currentSection = 'home';
         let currentMovie = null;
         let currentSourceIndex = 0;
+        let isSearchResults = false;
+        let lastSearchQuery = '';
 
         // ============================================
         // INITIALIZATION
@@ -1267,6 +1310,8 @@
 
         function showSection(sectionId) {
             currentSection = sectionId;
+            isSearchResults = false;
+            lastSearchQuery = '';
             document.querySelectorAll('.nav-item').forEach(function(item) {
                 item.classList.toggle('active', item.dataset.section === sectionId);
             });
@@ -1431,16 +1476,112 @@
             }
         }
 
+        // ============================================
+        // SEARCH FUNCTIONALITY
+        // ============================================
+
+        async function handleSearch(e) {
+            if (e.key === 'Enter') {
+                var query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    await performSearch(query);
+                }
+            }
+        }
+
+        async function performSearch(query) {
+            isSearchResults = true;
+            lastSearchQuery = query;
+            
+            // Switch to movies section if not already there
+            if (currentSection !== 'movies') {
+                currentSection = 'movies';
+                document.querySelectorAll('.nav-item').forEach(function(item) {
+                    item.classList.toggle('active', item.dataset.section === 'movies');
+                });
+            }
+
+            var container = document.getElementById('contentArea');
+            container.innerHTML = 
+                '<div class="section-header">' +
+                    '<h2><i class="ri-search-line"></i> Search Results</h2>' +
+                    '<div class="search-header">' +
+                        '<p class="search-info">Searching for: <span>"' + escapeHtml(query) + '"</span></p>' +
+                        '<button class="clear-search-btn" id="clearSearchBtn">' +
+                            '<i class="ri-close-line"></i> Clear Search' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="cards-grid" id="moviesGrid">' +
+                    '<div class="loading-container">' +
+                        '<i class="ri-loader-4-line loading-spinner"></i>' +
+                        '<p>Searching TMDB for movies...</p>' +
+                    '</div>' +
+                '</div>';
+
+            document.getElementById('clearSearchBtn').addEventListener('click', function() {
+                document.getElementById('searchInput').value = '';
+                showSection('movies');
+            });
+
+            try {
+                var response = await fetch(
+                    CONFIG.TMDB_BASE_URL + '/search/movie?api_key=' + CONFIG.TMDB_API_KEY + '&query=' + encodeURIComponent(query) + '&page=1'
+                );
+                var data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    currentMovies = data.results.map(function(movie) {
+                        return {
+                            id: movie.id,
+                            title: movie.title,
+                            year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
+                            rating: movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A',
+                            image: movie.poster_path ? CONFIG.TMDB_IMAGE_URL + '/w500' + movie.poster_path : null,
+                            backdrop: movie.backdrop_path ? CONFIG.TMDB_IMAGE_URL + '/original' + movie.backdrop_path : null,
+                            overview: movie.overview
+                        };
+                    });
+                    
+                    displayMovies();
+                    updateStatus('active', 'Found ' + currentMovies.length + ' results');
+                    
+                    // Update header with count
+                    var header = container.querySelector('.section-header h2');
+                    header.innerHTML = '<i class="ri-search-line"></i> Search Results (' + currentMovies.length + ' found)';
+                } else {
+                    document.getElementById('moviesGrid').innerHTML = 
+                        '<div class="error-container">' +
+                            '<i class="ri-search-line error-icon" style="color: var(--accent-yellow);"></i>' +
+                            '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">No movies found</p>' +
+                            '<p>No results for "' + escapeHtml(query) + '". Try a different search term.</p>' +
+                        '</div>';
+                    updateStatus('active', 'No results');
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                document.getElementById('moviesGrid').innerHTML = 
+                    '<div class="error-container">' +
+                        '<i class="ri-error-warning-line error-icon"></i>' +
+                        '<p style="color: var(--text); font-weight: 600; margin-bottom: 8px;">Search failed</p>' +
+                        '<p>Could not search TMDB. Check your connection.</p>' +
+                    '</div>';
+                updateStatus('error', 'Search failed');
+            }
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         function openMovieModal(movieId) {
-            if (movieId === 'search') {
-                // currentMovie already set by handleSearch
-            } else {
-                currentMovie = null;
-                for (var i = 0; i < currentMovies.length; i++) {
-                    if (currentMovies[i].id === movieId) {
-                        currentMovie = currentMovies[i];
-                        break;
-                    }
+            currentMovie = null;
+            for (var i = 0; i < currentMovies.length; i++) {
+                if (currentMovies[i].id === movieId) {
+                    currentMovie = currentMovies[i];
+                    break;
                 }
             }
             
@@ -1788,32 +1929,10 @@
 
         function refreshData() {
             if (currentSection === 'movies') {
-                showSection('movies');
-            }
-        }
-
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                var query = document.getElementById('searchInput').value.trim();
-                if (query) {
-                    currentMovie = {
-                        title: query,
-                        id: 'search',
-                        year: 'Search',
-                        rating: 'N/A',
-                        image: null
-                    };
-                    
-                    if (currentSection !== 'movies') {
-                        showSection('movies');
-                        setTimeout(function() {
-                            document.getElementById('modalTitle').textContent = 'Search: "' + query + '"';
-                            openMovieModal('search');
-                        }, 100);
-                    } else {
-                        document.getElementById('modalTitle').textContent = 'Search: "' + query + '"';
-                        openMovieModal('search');
-                    }
+                if (isSearchResults && lastSearchQuery) {
+                    performSearch(lastSearchQuery);
+                } else {
+                    showSection('movies');
                 }
             }
         }
